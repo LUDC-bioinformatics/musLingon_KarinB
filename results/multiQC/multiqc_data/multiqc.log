@@ -1,0 +1,107 @@
+[2017-12-20 12:39:57,664] multiqc                                            [DEBUG  ]  No MultiQC config found: /pica/sw/apps/bioinfo/MultiQC/1.0/milou/lib/python2.7/site-packages/multiqc_config.yaml
+[2017-12-20 12:39:57,664] multiqc                                            [DEBUG  ]  No MultiQC config found: /home/dagah/.multiqc_config.yaml
+[2017-12-20 12:39:57,664] multiqc                                            [DEBUG  ]  No MultiQC config found: multiqc_config.yaml
+[2017-12-20 12:39:57,664] multiqc                                            [DEBUG  ]  Command used: /sw/apps/bioinfo/MultiQC/1.0/milou/bin/multiqc -f -v -p ../1.1_fastqc/ ../2.3.rsem_star/ ../3.3_rseqc/ ../3.3_rseqc/infer_experiment/
+[2017-12-20 12:39:57,665] multiqc                                            [DEBUG  ]  Could not connect to multiqc.info for version check
+[2017-12-20 12:39:57,665] multiqc                                            [INFO   ]  This is MultiQC v1.0
+[2017-12-20 12:39:57,665] multiqc                                            [DEBUG  ]  Command     : /sw/apps/bioinfo/MultiQC/1.0/milou/bin/multiqc -f -v -p ../1.1_fastqc/ ../2.3.rsem_star/ ../3.3_rseqc/ ../3.3_rseqc/infer_experiment/
+[2017-12-20 12:39:57,665] multiqc                                            [DEBUG  ]  Working dir : /pica/v19/b2016057/nbis/Analysis/4.3_multiQC
+[2017-12-20 12:39:57,665] multiqc                                            [INFO   ]  Template    : default
+[2017-12-20 12:39:57,665] multiqc                                            [DEBUG  ]  Running in --force mode, will overwrite any existing reports.
+[2017-12-20 12:39:57,665] multiqc                                            [INFO   ]  Searching '../1.1_fastqc/'
+[2017-12-20 12:39:57,665] multiqc                                            [INFO   ]  Searching '../2.3.rsem_star/'
+[2017-12-20 12:39:57,666] multiqc                                            [INFO   ]  Searching '../3.3_rseqc/'
+[2017-12-20 12:39:57,666] multiqc                                            [INFO   ]  Searching '../3.3_rseqc/infer_experiment/'
+[2017-12-20 12:39:57,666] multiqc                                            [DEBUG  ]  Analysing modules: custom_content, peddy, methylQA, qualimap, preseq, quast, rna_seqc, rseqc, busco, goleft_indexcov, snpeff, gatk, htseq, bcftools, featureCounts, picard, prokka, samblaster, samtools, bamtools, bismark, hicup, salmon, kallisto, slamdunk, star, tophat, bowtie2, bowtie1, adapterRemoval, cutadapt, trimmomatic, skewer, sortmerna, fastq_screen, fastqc, clusterflow
+[2017-12-20 12:39:57,666] multiqc                                            [DEBUG  ]  Using temporary directory for creating report: /scratch/11663481/tmpnZWJqp
+[2017-12-20 12:39:59,368] multiqc                                            [DEBUG  ]  Ignoring file as matched an ignore pattern: LFD24.rsem.transcript.bam
+[2017-12-20 12:39:59,368] multiqc                                            [DEBUG  ]  Ignoring file as matched an ignore pattern: LFD25.rsem.transcript.bam
+[2017-12-20 12:39:59,369] multiqc                                            [DEBUG  ]  Ignoring file as matched an ignore pattern: LFD34.rsem.transcript.bam
+[2017-12-20 12:39:59,369] multiqc                                            [DEBUG  ]  Ignoring file as matched an ignore pattern: LFD35.rsem.transcript.bam
+[2017-12-20 12:39:59,369] multiqc                                            [DEBUG  ]  Ignoring file as matched an ignore pattern: LFD37.rsem.transcript.bam
+[2017-12-20 12:39:59,369] multiqc                                            [DEBUG  ]  Ignoring file as matched an ignore pattern: HFD16.rsem.transcript.bam
+[2017-12-20 12:39:59,370] multiqc                                            [DEBUG  ]  Ignoring file as matched an ignore pattern: Lingon14.rsem.transcript.bam
+[2017-12-20 12:39:59,370] multiqc                                            [DEBUG  ]  Ignoring file as matched an ignore pattern: Lingon24.rsem.transcript.bam
+[2017-12-20 12:39:59,370] multiqc                                            [DEBUG  ]  Ignoring file as matched an ignore pattern: Lingon34.rsem.transcript.bam
+[2017-12-20 12:39:59,370] multiqc                                            [DEBUG  ]  Ignoring file as matched an ignore pattern: Lingon35.rsem.transcript.bam
+[2017-12-20 12:39:59,370] multiqc                                            [DEBUG  ]  Ignoring file as matched an ignore pattern: HFD14.rsem.transcript.bam
+[2017-12-20 12:40:09,580] multiqc                                            [DEBUG  ]  Ignoring file as matched an ignore pattern: HFD14.rsem.genome.bam
+[2017-12-20 12:40:19,375] multiqc                                            [DEBUG  ]  Ignoring file as matched an ignore pattern: HFD16.rsem.genome.bam
+[2017-12-20 12:40:31,241] multiqc                                            [DEBUG  ]  Ignoring file as matched an ignore pattern: Lingon14.rsem.genome.bam
+[2017-12-20 12:40:31,242] multiqc                                            [DEBUG  ]  Ignoring file as matched an ignore pattern: HFD24.rsem.transcript.bam
+[2017-12-20 12:40:41,445] multiqc                                            [DEBUG  ]  Ignoring file as matched an ignore pattern: LFD24.rsem.genome.bam
+[2017-12-20 12:40:51,283] multiqc                                            [DEBUG  ]  Ignoring file as matched an ignore pattern: HFD24.rsem.genome.bam
+[2017-12-20 12:41:01,098] multiqc                                            [DEBUG  ]  Ignoring file as matched an ignore pattern: Lingon24.rsem.genome.bam
+[2017-12-20 12:41:11,847] multiqc                                            [DEBUG  ]  Ignoring file as matched an ignore pattern: LFD25.rsem.genome.bam
+[2017-12-20 12:41:11,847] multiqc                                            [DEBUG  ]  Ignoring file as matched an ignore pattern: HFD25.rsem.transcript.bam
+[2017-12-20 12:41:24,955] multiqc                                            [DEBUG  ]  Ignoring file as matched an ignore pattern: HFD25.rsem.genome.bam
+[2017-12-20 12:41:34,925] multiqc                                            [DEBUG  ]  Ignoring file as matched an ignore pattern: Lingon34.rsem.genome.bam
+[2017-12-20 12:41:44,847] multiqc                                            [DEBUG  ]  Ignoring file as matched an ignore pattern: LFD34.rsem.genome.bam
+[2017-12-20 12:41:44,848] multiqc                                            [DEBUG  ]  Ignoring file as matched an ignore pattern: HFD35.rsem.transcript.bam
+[2017-12-20 12:41:55,017] multiqc                                            [DEBUG  ]  Ignoring file as matched an ignore pattern: HFD35.rsem.genome.bam
+[2017-12-20 12:42:05,112] multiqc                                            [DEBUG  ]  Ignoring file as matched an ignore pattern: Lingon35.rsem.genome.bam
+[2017-12-20 12:42:16,524] multiqc                                            [DEBUG  ]  Ignoring file as matched an ignore pattern: LFD35.rsem.genome.bam
+[2017-12-20 12:42:16,525] multiqc                                            [DEBUG  ]  Ignoring file as matched an ignore pattern: Lingon36.rsem.transcript.bam
+[2017-12-20 12:42:30,480] multiqc                                            [DEBUG  ]  Ignoring file as matched an ignore pattern: Lingon36.rsem.genome.bam
+[2017-12-20 12:42:42,571] multiqc                                            [DEBUG  ]  Ignoring file as matched an ignore pattern: LFD37.rsem.genome.bam
+[2017-12-20 12:43:11,930] multiqc                                            [DEBUG  ]  Ignoring file as matched an ignore pattern: mm10_MGC_GENE.bed
+[2017-12-20 12:43:11,931] multiqc                                            [DEBUG  ]  Ignoring file as matched an ignore pattern: mm10_MGC_GENE.bed
+[2017-12-20 12:43:12,228] multiqc.modules.custom_content.custom_content      [DEBUG  ]  No custom content found
+[2017-12-20 12:43:12,233] multiqc.modules.peddy.peddy                        [DEBUG  ]  Could not find any reports in ('../1.1_fastqc/', '../2.3.rsem_star/', '../3.3_rseqc/', '../3.3_rseqc/infer_experiment/')
+[2017-12-20 12:43:12,237] multiqc.modules.methylQA.methylQA                  [DEBUG  ]  Could not find any reports in ('../1.1_fastqc/', '../2.3.rsem_star/', '../3.3_rseqc/', '../3.3_rseqc/infer_experiment/')
+[2017-12-20 12:43:12,241] multiqc.modules.qualimap.QM_BamQC                  [DEBUG  ]  Using default Qualimap thresholds: 1, 5, 10, 30, 50
+[2017-12-20 12:43:12,242] multiqc.modules.qualimap.qualimap                  [DEBUG  ]  Could not find any reports in ('../1.1_fastqc/', '../2.3.rsem_star/', '../3.3_rseqc/', '../3.3_rseqc/infer_experiment/')
+[2017-12-20 12:43:12,246] multiqc.modules.preseq.preseq                      [DEBUG  ]  Could not find any preseq data in ('../1.1_fastqc/', '../2.3.rsem_star/', '../3.3_rseqc/', '../3.3_rseqc/infer_experiment/')
+[2017-12-20 12:43:12,250] multiqc.modules.quast.quast                        [DEBUG  ]  Could not find any reports in ('../1.1_fastqc/', '../2.3.rsem_star/', '../3.3_rseqc/', '../3.3_rseqc/infer_experiment/')
+[2017-12-20 12:43:12,254] multiqc.modules.rna_seqc.rna_seqc                  [DEBUG  ]  Could not find any RNA-SeQC data in ('../1.1_fastqc/', '../2.3.rsem_star/', '../3.3_rseqc/', '../3.3_rseqc/infer_experiment/')
+[2017-12-20 12:43:14,513] multiqc.modules.rseqc.rseqc                        [INFO   ]  Found 15 read_duplication reports
+[2017-12-20 12:43:14,518] multiqc.modules.busco.busco                        [DEBUG  ]  Could not find any reports in ('../1.1_fastqc/', '../2.3.rsem_star/', '../3.3_rseqc/', '../3.3_rseqc/infer_experiment/')
+[2017-12-20 12:43:14,523] multiqc.modules.goleft_indexcov.goleft_indexcov    [DEBUG  ]  Did not find goleft indexcov outputs in ('../1.1_fastqc/', '../2.3.rsem_star/', '../3.3_rseqc/', '../3.3_rseqc/infer_experiment/')
+[2017-12-20 12:43:14,527] multiqc.modules.snpeff.snpeff                      [DEBUG  ]  Could not find any data in ('../1.1_fastqc/', '../2.3.rsem_star/', '../3.3_rseqc/', '../3.3_rseqc/infer_experiment/')
+[2017-12-20 12:43:14,531] multiqc.modules.gatk.gatk                          [DEBUG  ]  Could not find any reports in ('../1.1_fastqc/', '../2.3.rsem_star/', '../3.3_rseqc/', '../3.3_rseqc/infer_experiment/')
+[2017-12-20 12:43:14,535] multiqc.modules.htseq.htseq                        [DEBUG  ]  Could not find any reports in ('../1.1_fastqc/', '../2.3.rsem_star/', '../3.3_rseqc/', '../3.3_rseqc/infer_experiment/')
+[2017-12-20 12:43:14,540] multiqc.modules.bcftools.bcftools                  [DEBUG  ]  Could not find any reports in ('../1.1_fastqc/', '../2.3.rsem_star/', '../3.3_rseqc/', '../3.3_rseqc/infer_experiment/')
+[2017-12-20 12:43:14,544] multiqc.modules.featureCounts.feature_counts       [DEBUG  ]  Could not find any reports in ('../1.1_fastqc/', '../2.3.rsem_star/', '../3.3_rseqc/', '../3.3_rseqc/infer_experiment/')
+[2017-12-20 12:43:14,552] multiqc.modules.picard.picard                      [DEBUG  ]  Could not find any reports in ('../1.1_fastqc/', '../2.3.rsem_star/', '../3.3_rseqc/', '../3.3_rseqc/infer_experiment/')
+[2017-12-20 12:43:14,556] multiqc.modules.prokka.prokka                      [DEBUG  ]  Could not find any Prokka data in ('../1.1_fastqc/', '../2.3.rsem_star/', '../3.3_rseqc/', '../3.3_rseqc/infer_experiment/')
+[2017-12-20 12:43:14,561] multiqc.modules.samblaster.samblaster              [DEBUG  ]  Could not find any data in ('../1.1_fastqc/', '../2.3.rsem_star/', '../3.3_rseqc/', '../3.3_rseqc/infer_experiment/')
+[2017-12-20 12:43:14,566] multiqc.modules.samtools.samtools                  [DEBUG  ]  Could not find any reports in ('../1.1_fastqc/', '../2.3.rsem_star/', '../3.3_rseqc/', '../3.3_rseqc/infer_experiment/')
+[2017-12-20 12:43:14,571] multiqc.modules.bamtools.bamtools                  [DEBUG  ]  Could not find any reports in ('../1.1_fastqc/', '../2.3.rsem_star/', '../3.3_rseqc/', '../3.3_rseqc/infer_experiment/')
+[2017-12-20 12:43:14,575] multiqc.modules.bismark.bismark                    [DEBUG  ]  Could not find any reports in ('../1.1_fastqc/', '../2.3.rsem_star/', '../3.3_rseqc/', '../3.3_rseqc/infer_experiment/')
+[2017-12-20 12:43:14,580] multiqc.modules.hicup.hicup                        [DEBUG  ]  Could not find any HiCUP data in ('../1.1_fastqc/', '../2.3.rsem_star/', '../3.3_rseqc/', '../3.3_rseqc/infer_experiment/')
+[2017-12-20 12:43:14,584] multiqc.modules.salmon.salmon                      [DEBUG  ]  Could not find any Salmon data in ('../1.1_fastqc/', '../2.3.rsem_star/', '../3.3_rseqc/', '../3.3_rseqc/infer_experiment/')
+[2017-12-20 12:43:14,588] multiqc.modules.kallisto.kallisto                  [DEBUG  ]  Could not find any reports in ('../1.1_fastqc/', '../2.3.rsem_star/', '../3.3_rseqc/', '../3.3_rseqc/infer_experiment/')
+[2017-12-20 12:43:14,593] multiqc.modules.slamdunk.slamdunk                  [DEBUG  ]  No slamdunk reports found.
+[2017-12-20 12:43:14,597] multiqc.modules.star.star                          [DEBUG  ]  Could not find any reports in ('../1.1_fastqc/', '../2.3.rsem_star/', '../3.3_rseqc/', '../3.3_rseqc/infer_experiment/')
+[2017-12-20 12:43:14,601] multiqc.modules.tophat.tophat                      [DEBUG  ]  Could not find any reports in ('../1.1_fastqc/', '../2.3.rsem_star/', '../3.3_rseqc/', '../3.3_rseqc/infer_experiment/')
+[2017-12-20 12:43:14,605] multiqc.modules.bowtie2.bowtie2                    [DEBUG  ]  Could not find any reports in ('../1.1_fastqc/', '../2.3.rsem_star/', '../3.3_rseqc/', '../3.3_rseqc/infer_experiment/')
+[2017-12-20 12:43:14,610] multiqc.modules.bowtie1.bowtie1                    [DEBUG  ]  Could not find any reports in ('../1.1_fastqc/', '../2.3.rsem_star/', '../3.3_rseqc/', '../3.3_rseqc/infer_experiment/')
+[2017-12-20 12:43:14,614] multiqc.modules.adapterRemoval.adapterRemoval      [DEBUG  ]  Could not find any reports in ('../1.1_fastqc/', '../2.3.rsem_star/', '../3.3_rseqc/', '../3.3_rseqc/infer_experiment/')
+[2017-12-20 12:43:14,618] multiqc.modules.cutadapt.cutadapt                  [DEBUG  ]  Could not find any reports in ('../1.1_fastqc/', '../2.3.rsem_star/', '../3.3_rseqc/', '../3.3_rseqc/infer_experiment/')
+[2017-12-20 12:43:14,622] multiqc.modules.trimmomatic.trimmomatic            [DEBUG  ]  Could not find any Trimmomatic data in ('../1.1_fastqc/', '../2.3.rsem_star/', '../3.3_rseqc/', '../3.3_rseqc/infer_experiment/')
+[2017-12-20 12:43:14,626] multiqc.modules.skewer.skewer                      [DEBUG  ]  Could not find any data in ('../1.1_fastqc/', '../2.3.rsem_star/', '../3.3_rseqc/', '../3.3_rseqc/infer_experiment/')
+[2017-12-20 12:43:14,631] multiqc.modules.sortmerna.sortmerna                [DEBUG  ]  Could not find any SortMeRNA data in ('../1.1_fastqc/', '../2.3.rsem_star/', '../3.3_rseqc/', '../3.3_rseqc/infer_experiment/')
+[2017-12-20 12:43:14,635] multiqc.modules.fastq_screen.fastq_screen          [DEBUG  ]  Could not find any reports in ('../1.1_fastqc/', '../2.3.rsem_star/', '../3.3_rseqc/', '../3.3_rseqc/infer_experiment/')
+[2017-12-20 12:43:17,991] multiqc.modules.fastqc.fastqc                      [INFO   ]  Found 20 reports
+[2017-12-20 12:43:25,389] multiqc.modules.clusterflow.clusterflow            [DEBUG  ]  Could not find any reports in ('../1.1_fastqc/', '../2.3.rsem_star/', '../3.3_rseqc/', '../3.3_rseqc/infer_experiment/')
+[2017-12-20 12:43:25,428] multiqc                                            [INFO   ]  Compressing plot data
+[2017-12-20 12:43:27,436] multiqc                                            [WARNING]  Deleting    : multiqc_report.html   (-f was specified)
+[2017-12-20 12:43:28,059] multiqc                                            [INFO   ]  Report      : multiqc_report.html
+[2017-12-20 12:43:28,060] multiqc                                            [WARNING]  Deleting    : multiqc_data   (-f was specified)
+[2017-12-20 12:43:28,107] multiqc                                            [INFO   ]  Data        : multiqc_data
+[2017-12-20 12:43:28,108] multiqc                                            [DEBUG  ]  Moving data file from '/scratch/11663481/tmpnZWJqp/multiqc_data/mqc_fastqc_per_base_n_content_plot_1.txt' to '/pica/v19/b2016057/nbis/Analysis/4.3_multiQC/multiqc_data'
+[2017-12-20 12:43:28,122] multiqc                                            [DEBUG  ]  Moving data file from '/scratch/11663481/tmpnZWJqp/multiqc_data/mqc_fastqc_adapter_content_plot_1.txt' to '/pica/v19/b2016057/nbis/Analysis/4.3_multiQC/multiqc_data'
+[2017-12-20 12:43:28,138] multiqc                                            [DEBUG  ]  Moving data file from '/scratch/11663481/tmpnZWJqp/multiqc_data/mqc_fastqc_per_sequence_quality_scores_plot_1.txt' to '/pica/v19/b2016057/nbis/Analysis/4.3_multiQC/multiqc_data'
+[2017-12-20 12:43:28,147] multiqc                                            [DEBUG  ]  Moving data file from '/scratch/11663481/tmpnZWJqp/multiqc_data/multiqc_general_stats.txt' to '/pica/v19/b2016057/nbis/Analysis/4.3_multiQC/multiqc_data'
+[2017-12-20 12:43:28,149] multiqc                                            [DEBUG  ]  Moving data file from '/scratch/11663481/tmpnZWJqp/multiqc_data/mqc_fastqc_per_base_sequence_quality_plot_1.txt' to '/pica/v19/b2016057/nbis/Analysis/4.3_multiQC/multiqc_data'
+[2017-12-20 12:43:28,176] multiqc                                            [DEBUG  ]  Moving data file from '/scratch/11663481/tmpnZWJqp/multiqc_data/mqc_fastqc_sequence_duplication_levels_plot_1.txt' to '/pica/v19/b2016057/nbis/Analysis/4.3_multiQC/multiqc_data'
+[2017-12-20 12:43:28,178] multiqc                                            [DEBUG  ]  Moving data file from '/scratch/11663481/tmpnZWJqp/multiqc_data/multiqc_sources.txt' to '/pica/v19/b2016057/nbis/Analysis/4.3_multiQC/multiqc_data'
+[2017-12-20 12:43:28,224] multiqc                                            [DEBUG  ]  Moving data file from '/scratch/11663481/tmpnZWJqp/multiqc_data/mqc_fastqc_per_sequence_gc_content_plot_Percentages.txt' to '/pica/v19/b2016057/nbis/Analysis/4.3_multiQC/multiqc_data'
+[2017-12-20 12:43:28,226] multiqc                                            [DEBUG  ]  Moving data file from '/scratch/11663481/tmpnZWJqp/multiqc_data/multiqc_fastqc.txt' to '/pica/v19/b2016057/nbis/Analysis/4.3_multiQC/multiqc_data'
+[2017-12-20 12:43:28,228] multiqc                                            [DEBUG  ]  Moving data file from '/scratch/11663481/tmpnZWJqp/multiqc_data/mqc_fastqc_per_sequence_gc_content_plot_Counts.txt' to '/pica/v19/b2016057/nbis/Analysis/4.3_multiQC/multiqc_data'
+[2017-12-20 12:43:28,230] multiqc                                            [DEBUG  ]  Moving data file from '/scratch/11663481/tmpnZWJqp/multiqc_data/mqc_rseqc_read_dups_plot_1.txt' to '/pica/v19/b2016057/nbis/Analysis/4.3_multiQC/multiqc_data'
+[2017-12-20 12:43:28,233] multiqc                                            [INFO   ]  Plots       : multiqc_plots
+[2017-12-20 12:43:28,233] multiqc                                            [DEBUG  ]  Moving plots directory from '/scratch/11663481/tmpnZWJqp/multiqc_plots/png' to '/pica/v19/b2016057/nbis/Analysis/4.3_multiQC/multiqc_plots'
+[2017-12-20 12:43:28,674] multiqc                                            [DEBUG  ]  Moving plots directory from '/scratch/11663481/tmpnZWJqp/multiqc_plots/svg' to '/pica/v19/b2016057/nbis/Analysis/4.3_multiQC/multiqc_plots'
+[2017-12-20 12:43:28,921] multiqc                                            [DEBUG  ]  Moving plots directory from '/scratch/11663481/tmpnZWJqp/multiqc_plots/pdf' to '/pica/v19/b2016057/nbis/Analysis/4.3_multiQC/multiqc_plots'
+[2017-12-20 12:43:29,300] multiqc                                            [INFO   ]  MultiQC complete
