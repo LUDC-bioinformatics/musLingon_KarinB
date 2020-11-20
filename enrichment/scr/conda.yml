@@ -1,4 +1,4 @@
-# conda list -e | grep -E ""
+# conda list -e | grep -E "r-knitr|r-rmarkdown|r-ggplot2|r-gprofiler2|bioconductor-clusterprofiler|bioconductor-org.mm.eg.db"
 # conda env update --file conda.yml  --prune
 # conda env remove --name musLingon
 # conda env create -f conda.yml
@@ -12,9 +12,9 @@ channels:
   - bioconda
 
 dependencies:
-  - r-knitr
-  - r-rmarkdown
-  - r-ggplot2
-  - r-gprofiler2
-  - bioconductor-clusterprofiler
-  - bioconductor-org.mm.eg.db
+  - bioconductor-clusterprofiler=3.18.0=r40_0
+  - bioconductor-org.mm.eg.db=3.12.0=r40_0
+  - r-ggplot2=3.3.2=r40hc72bb7e_1
+  - r-gprofiler2=0.2.0=r40h6115d3f_0
+  - r-knitr=1.30=r40h6115d3f_0
+  - r-rmarkdown=2.5=r40h142f84f_0
