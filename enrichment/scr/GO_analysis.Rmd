@@ -49,7 +49,7 @@ pattern2.FDR0.05 <- read.table("Matrix/pattern/pattern2_FDR0.05.csv",
 pattern3.FDR0.05 <- read.table("Matrix/pattern/pattern3_FDR0.05.csv",
                                header = TRUE)
 pattern4.FDR0.05 <- read.table("Matrix/pattern/pattern4_FDR0.05.csv",
-                               eader = TRUE)
+                               header = TRUE)
 pattern_table <- read.table(gzfile("Matrix/GeneMat_HFD_Lingon_LDF.Ebseqresults.pattern.gz"),
                             header = TRUE)
 full_gene <- read.table("Matrix/full_gene_list.csv", header = FALSE)
@@ -100,6 +100,8 @@ ego <- function(pattern_data){
    return(ego_pattern)
 }
 ```
+
+### GO
 
 #### pattern2.FDR0.05 (LFD specific)
 
@@ -161,6 +163,55 @@ dotplot(ego_pattern4.FDR0.05,showCategory=ego_pattern4.FDR0.05_n)
 heatplot(ego_pattern4.FDR0.05)
 ```
 
+### KEGG
+
+```{r, message=F}
+full_entrez <- bitr(full_gene[,1],
+                    fromType = "ENSEMBL",
+                    toType = c("ENTREZID"),
+                    OrgDb = org.Mm.eg.db)
+eKEGG <- function(pattern_data){
+   pattern_entrez <- bitr(pattern_data[,1],
+                    fromType = "ENSEMBL",
+                    toType = c("ENTREZID"),
+                    OrgDb = org.Mm.eg.db)
+   eKEGG_pattern <- enrichKEGG(gene = pattern_entrez[,2], # test gene list
+                           universe = full_entrez[,2], # background gene list
+                           organism='mmu',
+                           pvalueCutoff  = 0.01,
+                           qvalueCutoff  = 0.05)
+   eKEGG_pattern_genes <- setReadable(eKEGG_pattern,
+                                      OrgDb = org.Mm.eg.db,
+                                      keyType="ENTREZID")
+   file_name <- paste("GO_results/clusterprofiler/",
+                      deparse(substitute(pattern_data)),
+                      "_KEGG_enrich.csv", sep = "")
+   write.csv(as.data.frame(eKEGG_pattern_genes), file_name, row.names = F)
+   return(eKEGG_pattern_genes)
+}
+```
+
+#### pattern2.FDR0.05 (LFD specific)
+
+```{r, message=F}
+eKEGG_pattern2.FDR0.05 <- eKEGG(pattern2.FDR0.05)
+knitr::kable(as.data.frame(eKEGG_pattern2.FDR0.05))
+```
+
+#### pattern3.FDR0.05 (Lingon specific)
+
+```{r, message=F}
+eKEGG_pattern3.FDR0.05 <- eKEGG(pattern3.FDR0.05)
+knitr::kable(as.data.frame(eKEGG_pattern3.FDR0.05))
+```
+
+#### pattern4.FDR0.05 (HFD specific)
+
+```{r, message=F}
+eKEGG_pattern4.FDR0.05 <- eKEGG(pattern4.FDR0.05)
+knitr::kable(as.data.frame(eKEGG_pattern4.FDR0.05))
+```
+
 ## gProfiler
 
 [gProfiler2](https://cran.r-project.org/web/packages/gprofiler2/vignettes/gprofiler2.html)
@@ -168,7 +219,6 @@ heatplot(ego_pattern4.FDR0.05)
 ```{r}
 dataSourses = c('GO', 'KEGG', 'REAC', 'WP')
 ```
-
 
 ### pattern2.FDR0.05 (LFD specific)
 
@@ -208,6 +258,7 @@ gost_pattern4 <- gost(pattern4.FDR0.05[,1],
                       evcodes=TRUE)
 gostplot(gost_pattern4)
 ```
+
 
 ## GO analysis tables
 
