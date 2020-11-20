@@ -1,5 +1,5 @@
 ---
-title: "LingonProj Gene Ontology Analysis"
+title: "Mouse Lingon diet experiment: Enrichment Analysis"
 author:
    name: "Shuyi Li"
    email: shuyi.li@med.lu.se
@@ -15,9 +15,18 @@ knitr::opts_chunk$set(echo=TRUE, warning=FALSE, eval=TRUE)
 knitr::opts_knit$set(root.dir = '../')
 ```
 
+## Libraries
+
+```{r, message=FALSE}
+library(clusterProfiler)
+library(org.Mm.eg.db)
+library(ggplot2)
+library(gprofiler2)
+```
+
 ## Seperate genes based on different patterns
 
-Input for run_select_pattern.sh: RSEM result (GeneMat_HFD_Lingon_LDF.Ebseqresults/GeneMat_HFD_Lingon_LDF.Ebseqresults_FDR_0.05.tab)
+Input for `run_select_pattern.sh`: RSEM result (GeneMat_HFD_Lingon_LDF.Ebseqresults/GeneMat_HFD_Lingon_LDF.Ebseqresults_FDR_0.05.tab)
 
 Output: Gene list with EnsemblID	and GeneSymbol, classified as diffent patterns
 (Output folder: Matrix/pattern)
@@ -26,55 +35,57 @@ Output: Gene list with EnsemblID	and GeneSymbol, classified as diffent patterns
 #seperate genes based on different patterns
 scr/run_select_pattern.sh
 #full list of expressed genes
-cut -f 1 Matrix/GeneMat_HFD_Lingon_LDF.Ebseqresults | sed $'s/_/\t/' | sed $'s/"//g'|tail -n +2 > Matrix/full_gene_list.csv
+cut -f 1 Matrix/GeneMat_HFD_Lingon_LDF.Ebseqresults | \
+   sed 's/_/\t/;s/"//g' | \
+   tail -n +2 \
+   > Matrix/full_gene_list2.csv
 ```
 
-## GO analysis
+## Load data
 
-### Load data
 ```{r}
-pattern2.FDR0.05 <- read.table("Matrix/pattern/pattern2_FDR0.05.csv", header = TRUE)
-pattern3.FDR0.05 <- read.table("Matrix/pattern/pattern3_FDR0.05.csv", header = TRUE)
-pattern4.FDR0.05 <- read.table("Matrix/pattern/pattern4_FDR0.05.csv", header = TRUE)
+pattern2.FDR0.05 <- read.table("Matrix/pattern/pattern2_FDR0.05.csv",
+                               header = TRUE)
+pattern3.FDR0.05 <- read.table("Matrix/pattern/pattern3_FDR0.05.csv",
+                               header = TRUE)
+pattern4.FDR0.05 <- read.table("Matrix/pattern/pattern4_FDR0.05.csv",
+                               eader = TRUE)
+pattern_table <- read.table(gzfile("Matrix/GeneMat_HFD_Lingon_LDF.Ebseqresults.pattern.gz"),
+                            header = TRUE)
 full_gene <- read.table("Matrix/full_gene_list.csv", header = FALSE)
 names(full_gene) <- c("EnsemblID","GeneSymbol")
 ```
 
-```{r,message=FALSE}
-#load packages
-library(clusterProfiler)
-library(org.Mm.eg.db)
-library(ggplot2)
-library(gprofiler2)
-```
+## RSEM result summary
 
-### RSEM result summary
 Summarize the number of genes classified to each pattern (FDR cutoff = 0.05)
+
 ```{r}
-pattern_table <- read.table("Matrix/GeneMat_HFD_Lingon_LDF.Ebseqresults.pattern",header = TRUE)
 names(pattern_table) <- c("HDF","Lingon","LFD")
 RSEM_summary <-data.frame(c(0,155,40,123,0,318),
-                 row.names = c("pattern1.FDR0.05","pattern2.FDR0.05","pattern3.FDR0.05","pattern4.FDR0.05","pattern5.FDR0.05","Sum"))
+                 row.names = c("pattern1.FDR0.05","pattern2.FDR0.05",
+                               "pattern3.FDR0.05","pattern4.FDR0.05",
+                               "pattern5.FDR0.05","Sum"))
 names(RSEM_summary) <- c("number of genes")
 knitr::kable(pattern_table)
 knitr::kable(RSEM_summary)
 ```
-For example:
 
-Genes belonging to Pattern 1 equals no differential change between any of the experiments
+Explanation:
 
-Genes belonging to Pattern 2 are differentially expressed in LFD compared to HFD & Lingon
+- **Pattern1** - no differential change between any of the experiments.
+- **Pattern2** - differentially expressed (DE) in LFD compared to HFD & Lingon.
+- **Pattern3** - DE in Lingon compared to LFD & HFD.
+- **Pattern4** - DE in HFD compared to Lingon & LFD.
 
-Genes in Pattern 3 are DE in Lingon compared to the other experiments
+## ClusterProfiler
 
-Genes in Pattern 4 have similar expression in Lingon and LFD but are differentially expressed in HFD
+[ClusterProfiler](https://guangchuangyu.github.io/software/clusterProfiler)
 
-### GO analysis using clusterProfiler
-(clusterProfiler v3.16.1  For help: https://guangchuangyu.github.io/software/clusterProfiler)
 ```{r}
-ego<- function(pattern_data){
-   ego_pattern <- enrichGO(gene = pattern_data[,1], 
-                           universe = full_gene[,1],
+ego <- function(pattern_data){
+   ego_pattern <- enrichGO(gene = pattern_data[,1], # test gene list
+                           universe = full_gene[,1], # background gene list
                            OrgDb = org.Mm.eg.db, 
                            keyType = "ENSEMBL", 
                            ont = 'ALL',       
@@ -82,78 +93,131 @@ ego<- function(pattern_data){
                            pvalueCutoff  = 0.01,
                            qvalueCutoff  = 0.05,
                            readable      = TRUE)
-
-   str1 <- "GO_results/clusterProfiler/"
-   str2 <- "_GO_enrich.csv"
-   file_name <- paste(str1, deparse(substitute(pattern_data)), str2, sep = "")
+   file_name <- paste("GO_results/clusterprofiler/",
+                      deparse(substitute(pattern_data)),
+                      "_GO_enrich.csv", sep = "")
    write.csv(as.data.frame(ego_pattern),file_name,row.names = F)
    return(ego_pattern)
 }
 ```
 
-#### GO analysis for gene assigned to pattern2.FDR0.05
-```{r,fig.width=10, fig.height=4}
+#### pattern2.FDR0.05 (LFD specific)
+
+```{r}
 ego_pattern2.FDR0.05 <- ego(pattern2.FDR0.05)
-barplot(ego_pattern2.FDR0.05,showCategory=20,drop=T)
-dotplot(ego_pattern2.FDR0.05,showCategory=20)
+ego_pattern2.FDR0.05_n  <- dim(ego_pattern2.FDR0.05)[1]
+ego_pattern2.FDR0.05_n
+```
+
+```{r,fig.width=10, fig.height=4}
+barplot(ego_pattern2.FDR0.05, showCategory=ego_pattern2.FDR0.05_n)
+```
+
+```{r,fig.width=10, fig.height=5}
+dotplot(ego_pattern2.FDR0.05, showCategory=ego_pattern2.FDR0.05_n)
 ```
 
 ```{r,fig.width=10, fig.height=5}
 heatplot(ego_pattern2.FDR0.05)
 ```
 
-#### GO analysis for gene assigned to pattern3.FDR0.05
-```{r,fig.width=10, fig.height=2}
+#### pattern3.FDR0.05 (Lingon specific)
+
+```{r}
 ego_pattern3.FDR0.05 <- ego(pattern3.FDR0.05)
-barplot(ego_pattern3.FDR0.05,showCategory=20,drop=T)
-dotplot(ego_pattern3.FDR0.05,showCategory=20)
+ego_pattern3.FDR0.05_n  <- dim(ego_pattern3.FDR0.05)[1]
+ego_pattern3.FDR0.05_n
+```
+
+```{r,fig.width=10, fig.height=2}
+barplot(ego_pattern3.FDR0.05,showCategory=ego_pattern3.FDR0.05_n,drop=T)
+```
+
+```{r,fig.width=10, fig.height=2}
+dotplot(ego_pattern3.FDR0.05,showCategory=ego_pattern3.FDR0.05_n)
 ```
 
 ```{r,fig.width=10, fig.height=2}
 heatplot(ego_pattern3.FDR0.05)
 ```
 
-#### GO analysis for gene assigned to pattern4.FDR0.05
-```{r,fig.width=10, fig.height=4}
+#### pattern4.FDR0.05 (HFD specific)
+
+```{r}
 ego_pattern4.FDR0.05 <- ego(pattern4.FDR0.05)
-barplot(ego_pattern4.FDR0.05,showCategory=20,drop=T)
-dotplot(ego_pattern4.FDR0.05,showCategory=20)
+ego_pattern4.FDR0.05_n  <- dim(ego_pattern4.FDR0.05)[1]
+ego_pattern4.FDR0.05_n
 ```
 
-```{r,fig.width=10, fig.height=4}
+```{r,fig.width=10, fig.height=2}
+barplot(ego_pattern4.FDR0.05,showCategory=ego_pattern4.FDR0.05_n,drop=T)
+```
+
+```{r,fig.width=10, fig.height=2}
+dotplot(ego_pattern4.FDR0.05,showCategory=ego_pattern4.FDR0.05_n)
+```
+
+```{r,fig.width=10, fig.height=2}
 heatplot(ego_pattern4.FDR0.05)
 ```
 
-### GO analysis using gprofiler
-(gprofiler2 version 0.2.0 For help:https://cran.r-project.org/web/packages/gprofiler2/vignettes/gprofiler2.html)
+## gProfiler
 
-#### GO analysis for gene assigned to pattern2.FDR0.05
+[gProfiler2](https://cran.r-project.org/web/packages/gprofiler2/vignettes/gprofiler2.html)
+
 ```{r}
-gost_pattern2 <- gost(pattern2.FDR0.05[,1], organism ='mmusculus', sources = 'GO', significant = TRUE)
+dataSourses = c('GO', 'KEGG', 'REAC', 'WP')
+```
+
+
+### pattern2.FDR0.05 (LFD specific)
+
+```{r}
+gost_pattern2 <- gost(pattern2.FDR0.05[,1],
+                      domain_scope = "custom",
+                      custom_bg = full_gene[,1],
+                      sources = dataSourses,
+                      organism ='mmusculus',
+                      significant = TRUE,
+                      evcodes=TRUE)
 gostplot(gost_pattern2)
 ```
 
-#### GO analysis for gene assigned to pattern3.FDR0.05
+### pattern3.FDR0.05 (Lingon specific)
+
 ```{r}
-gost_pattern3 <- gost(pattern3.FDR0.05[,1], organism ='mmusculus', sources = 'GO', significant = TRUE)
+gost_pattern3 <- gost(pattern3.FDR0.05[,1],
+                      domain_scope = "custom",
+                      custom_bg = full_gene[,1],
+                      sources = dataSourses,
+                      organism ='mmusculus',
+                      significant = TRUE,
+                      evcodes=TRUE)
 gostplot(gost_pattern3)
 ```
 
-#### GO analysis for gene assigned to pattern4.FDR0.05
+### pattern4.FDR0.05 (HFD specific)
+
 ```{r}
-gost_pattern4 <- gost(pattern4.FDR0.05[,1], organism ='mmusculus', sources = 'GO', significant = TRUE)
+gost_pattern4 <- gost(pattern4.FDR0.05[,1],
+                      domain_scope = "custom",
+                      custom_bg = full_gene[,1],
+                      sources = dataSourses,
+                      organism ='mmusculus',
+                      significant = TRUE,
+                      evcodes=TRUE)
 gostplot(gost_pattern4)
 ```
 
-### GO analysis output
+## GO analysis tables
 
-#### clusterProfiler
+### clusterProfiler
 
 [clusterProfiler GO analysis output](../GO_results/clusterProfiler)
 
 clusterProfiler GO analysis output files are in the ./GO_results/clusterProfiler
 
-#### gprofiler
+### gprofiler
 
 [gprofiler GO analysis output - pattern2.FDR0.05](https://biit.cs.ut.ee/gplink/l/faZQDvB8SE)
 
