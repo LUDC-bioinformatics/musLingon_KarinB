@@ -1,0 +1,8 @@
+"source","term_name","term_id","adjusted_p_value","negative_log10_of_adjusted_p_value","term_size","query_size","intersection_size","effective_domain_size","intersections"
+"GO:MF","monophenol monooxygenase activity","GO:0004503","0.0009458172178768461","3.0241927842507663","2","35","2","21123",
+"GO:MF","oxidoreductase activity, acting on paired donors, with incorporation or reduction of molecular oxygen, another compound as one donor, and incorporation of one atom of oxygen","GO:0016716","0.0028344961147649585","2.547524133958704","3","35","2","21123",
+"GO:BP","melanin biosynthetic process","GO:0042438","0.007242266221129451","2.1401255148348826","22","31","3","21331",
+"GO:BP","melanin metabolic process","GO:0006582","0.009499682591906394","2.022290905330781","24","31","3","21331",
+"GO:BP","secondary metabolite biosynthetic process","GO:0044550","0.009499682591906394","2.022290905330781","24","31","3","21331",
+"GO:BP","pigmentation","GO:0043473","0.016077484477039918","1.7937819010603344","92","31","4","21331",
+"GO:BP","positive regulation of sodium ion transport","GO:0010765","0.042265401724539804","1.3740149987829298","39","31","3","21331",

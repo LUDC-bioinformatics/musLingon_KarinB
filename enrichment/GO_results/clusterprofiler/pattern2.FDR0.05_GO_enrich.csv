@@ -1,0 +1,31 @@
+"ONTOLOGY","ID","Description","GeneRatio","BgRatio","pvalue","p.adjust","qvalue","geneID","Count"
+"BP","GO:0042730","fibrinolysis","6/144","19/16766",8.947019164707e-09,2.25196472375675e-05,2.03050245464298e-05,"Serpine1/Fga/Fgg/Fgb/Plg/F2",6
+"BP","GO:0030195","negative regulation of blood coagulation","7/144","47/16766",1.40542618766337e-07,0.000102796689594216,9.26874778935366e-05,"Serpine1/Fga/Kng1/Fgg/Fgb/Plg/F2",7
+"BP","GO:0050819","negative regulation of coagulation","7/144","48/16766",1.63363829311428e-07,0.000102796689594216,9.26874778935366e-05,"Serpine1/Fga/Kng1/Fgg/Fgb/Plg/F2",7
+"BP","GO:1900047","negative regulation of hemostasis","7/144","48/16766",1.63363829311428e-07,0.000102796689594216,9.26874778935366e-05,"Serpine1/Fga/Kng1/Fgg/Fgb/Plg/F2",7
+"BP","GO:0030193","regulation of blood coagulation","8/144","75/16766",2.52925836880189e-07,0.000117731950203396,0.000106153978060147,"Serpine1/Fga/Kng1/Fgg/Fgb/Plg/F2/F2r",8
+"BP","GO:1900046","regulation of hemostasis","8/144","76/16766",2.80648272236938e-07,0.000117731950203396,0.000106153978060147,"Serpine1/Fga/Kng1/Fgg/Fgb/Plg/F2/F2r",8
+"BP","GO:0050818","regulation of coagulation","8/144","78/16766",3.43977473052397e-07,0.00012368447138184,0.000111521117579093,"Serpine1/Fga/Kng1/Fgg/Fgb/Plg/F2/F2r",8
+"BP","GO:0061045","negative regulation of wound healing","7/144","67/16766",1.68426570354932e-06,0.000529912096979205,0.000477799586427939,"Serpine1/Fga/Kng1/Fgg/Fgb/Plg/F2",7
+"BP","GO:0034116","positive regulation of heterotypic cell-cell adhesion","4/144","14/16766",4.88643525254145e-06,0.00136657305896076,0.00123218180169349,"Fga/Gcnt2/Fgg/Fgb",4
+"BP","GO:2000352","negative regulation of endothelial cell apoptotic process","5/144","31/16766",6.18740775619065e-06,0.00155737053223319,0.00140421590761548,"Ramp2/Serpine1/Fga/Fgg/Fgb",5
+"BP","GO:1903035","negative regulation of response to wounding","7/144","84/16766",7.76869551013047e-06,0.00177761878172713,0.00160280454735323,"Serpine1/Fga/Kng1/Fgg/Fgb/Plg/F2",7
+"BP","GO:0061041","regulation of wound healing","8/144","132/16766",1.83030919140871e-05,0.00383907352897977,0.00346153211989226,"Serpine1/Fga/Kng1/Fgg/Fgb/Plg/F2/F2r",8
+"BP","GO:0010883","regulation of lipid storage","5/144","42/16766",2.87127767913563e-05,0.0054242264662873,0.00489079826080147,"Mest/Cidea/Apoc4/Apob/Acacb",5
+"BP","GO:0019915","lipid storage","6/144","70/16766",3.01705087516974e-05,0.0054242264662873,0.00489079826080147,"Mest/Cidea/Apoc4/Apob/Ffar2/Acacb",6
+"BP","GO:0010884","positive regulation of lipid storage","4/144","22/16766",3.38495845987489e-05,0.00567996029567006,0.00512138276455456,"Cidea/Apoc4/Apob/Acacb",4
+"BP","GO:0031639","plasminogen activation","4/144","23/16766",4.07031780379677e-05,0.00627898201121029,0.00566149560511443,"Serpine1/Fga/Fgg/Fgb",4
+"BP","GO:1904036","negative regulation of epithelial cell apoptotic process","5/144","46/16766",4.50089789337516e-05,0.00627898201121029,0.00566149560511443,"Ramp2/Serpine1/Fga/Fgg/Fgb",5
+"BP","GO:0007596","blood coagulation","8/144","152/16766",5.04374510279593e-05,0.00627898201121029,0.00566149560511443,"Serpine1/Fga/Kng1/Fgg/Fgb/Plg/F2/F2r",8
+"BP","GO:0007599","hemostasis","8/144","154/16766",5.53348403299393e-05,0.00627898201121029,0.00566149560511443,"Serpine1/Fga/Kng1/Fgg/Fgb/Plg/F2/F2r",8
+"BP","GO:0050817","coagulation","8/144","154/16766",5.53348403299393e-05,0.00627898201121029,0.00566149560511443,"Serpine1/Fga/Kng1/Fgg/Fgb/Plg/F2/F2r",8
+"BP","GO:0030194","positive regulation of blood coagulation","4/144","25/16766",5.73764744766931e-05,0.00627898201121029,0.00566149560511443,"Serpine1/Plg/F2/F2r",4
+"BP","GO:0034114","regulation of heterotypic cell-cell adhesion","4/144","25/16766",5.73764744766931e-05,0.00627898201121029,0.00566149560511443,"Fga/Gcnt2/Fgg/Fgb",4
+"BP","GO:1900048","positive regulation of hemostasis","4/144","25/16766",5.73764744766931e-05,0.00627898201121029,0.00566149560511443,"Serpine1/Plg/F2/F2r",4
+"BP","GO:1902373","negative regulation of mRNA catabolic process","5/144","49/16766",6.13320423787203e-05,0.00643219794446829,0.00579964400739127,"Dazl/Pkp1/Hnrnpa0/Igf2bp1/Fmr1",5
+"BP","GO:0050820","positive regulation of coagulation","4/144","28/16766",9.10286032385028e-05,0.00881226901351198,0.00794565459847012,"Serpine1/Plg/F2/F2r",4
+"BP","GO:1902042","negative regulation of extrinsic apoptotic signaling pathway via death domain receptors","4/144","28/16766",9.10286032385028e-05,0.00881226901351198,0.00794565459847012,"Serpine1/Fga/Fgg/Fgb",4
+"BP","GO:0072376","protein activation cascade","3/144","11/16766",9.73423264509424e-05,0.00883424107846952,0.00796546589096472,"Fga/Fgg/Fgb",3
+"BP","GO:2000351","regulation of endothelial cell apoptotic process","5/144","54/16766",9.82752285248894e-05,0.00883424107846952,0.00796546589096472,"Ramp2/Serpine1/Fga/Fgg/Fgb",5
+"BP","GO:1903034","regulation of response to wounding","8/144","170/16766",0.000110701797965397,0.0096081526027208,0.00866326956128475,"Serpine1/Fga/Kng1/Fgg/Fgb/Plg/F2/F2r",8
+"CC","GO:0062023","collagen-containing extracellular matrix","12/148","331/17070",3.19890245512656e-05,0.00854106955518791,0.00808143778137236,"Serpine1/Fga/Anxa6/Kng1/Fgg/Pzp/Fgb/Trf/Ambp/Adamtsl5/Plg/F2",12

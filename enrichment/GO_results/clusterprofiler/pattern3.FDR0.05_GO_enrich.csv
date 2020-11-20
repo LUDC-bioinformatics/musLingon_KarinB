@@ -1,0 +1,6 @@
+"ONTOLOGY","ID","Description","GeneRatio","BgRatio","pvalue","p.adjust","qvalue","geneID","Count"
+"BP","GO:0043473","pigmentation","5/30","97/16766",7.42325321231669e-07,0.000607222112767505,0.000481339366188114,"Tyr/Mc1r/Tyrp1/Rab11b/Dock7",5
+"BP","GO:0042438","melanin biosynthetic process","3/30","22/16766",7.7806559253952e-06,0.00278156250178318,0.00220491893076624,"Tyr/Mc1r/Tyrp1",3
+"BP","GO:0006582","melanin metabolic process","3/30","24/16766",1.02013294686425e-05,0.00278156250178318,0.00220491893076624,"Tyr/Mc1r/Tyrp1",3
+"BP","GO:0044550","secondary metabolite biosynthetic process","3/30","28/16766",1.64320566588112e-05,0.00336035558672689,0.00266372286890203,"Tyr/Mc1r/Tyrp1",3
+"BP","GO:0010765","positive regulation of sodium ion transport","3/30","41/16766",5.26366133324725e-05,0.00861134994119249,0.00682613764480064,"Nedd4l/Kif5b/Fxyd1",3
