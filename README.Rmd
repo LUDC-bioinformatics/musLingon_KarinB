@@ -38,7 +38,7 @@ Each group has 5 samples.
 1. QC sequencing data (NBIS).
 2. Obtain the count data  (NBIS).
 3. Compare HFD vs LFD vs Lingon (NBIS).
-4. Perform GO enrichment analysis (LUDC-BU).
+4. Perform enrichment analysis (LUDC-BU).
 5. Check interesting GO (LUDC-BU):
   - glucose metabolism
   - adipogenesis
@@ -235,14 +235,28 @@ Patterns indicate the following:
 - *Pattern3* - Lingon specific (genes differ from HFD & LFD).
 - *Pattern4* - HFD specific (genes differ from Lingon and LFD).
 
-### GO enrichment analysis
+### Enrichment analysis
 
+We performed the enrichment analysis with two programs: clusterProfiler and gProfiler.
+They produce slightly different results: clusterProfiler is more conservative, while
+gProfiler tests enrichment in Reactome and WikiPathways in addition to GO and KEGG.
+
+results:
+
+- `results/enrichment/enrichment.html` - report describing the analyses.
+- `results/enrichment/clusterprofiler/` - clusterProfiler GO and KEGG enrichment results.
+- `results/enrichment/gprofiler/` - gProfiler GO, KEGG, Reactome, and WikiPathways enrichment results.
 
 ### Interesting GO terms
 
+Genes related to these functions are of main interested:
   - glucose metabolism
   - adipogenesis
   - mitochondria functions
+
+We have not seen enrichment that can be associated to these functions.
+So, we annotated all analysed genes with GO and searched for these function 
+among them to see how these genes are expressed.
   
 ## Results
 
@@ -251,5 +265,6 @@ We copied the essential results files to `results/`:
 - `results/RSEM/*.results` - gene and isoform counts.
 - `results/multiQC` - QC summary.
 - `results/EBSeq` - differential expression results.
+- `results/enrichment/` - enrichment results.
 
 See the description of the files in the analysis steps.
