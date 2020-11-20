@@ -25,11 +25,11 @@ library(ggplot2)
 library(gprofiler2)
 ```
 
-## Seperate genes based on different patterns
+## Separate genes based on different patterns
 
 Input for `run_select_pattern.sh`: RSEM result (GeneMat_HFD_Lingon_LDF.Ebseqresults/GeneMat_HFD_Lingon_LDF.Ebseqresults_FDR_0.05.tab)
 
-Output: Gene list with EnsemblID	and GeneSymbol, classified as diffent patterns
+Output: Gene list with EnsemblID	and GeneSymbol, classified as different patterns
 (Output folder: Matrix/pattern)
 
 ```{bash, eval=FALSE}
