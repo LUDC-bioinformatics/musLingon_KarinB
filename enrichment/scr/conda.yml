@@ -1,0 +1,20 @@
+# conda list -e | grep -E ""
+# conda env update --file conda.yml  --prune
+# conda env remove --name musLingon
+# conda env create -f conda.yml
+
+name: musLingon
+
+prefix: musLingon
+
+channels:
+  - conda-forge
+  - bioconda
+
+dependencies:
+  - r-knitr
+  - r-rmarkdown
+  - r-ggplot2
+  - r-gprofiler2
+  - bioconductor-clusterprofiler
+  - bioconductor-org.mm.eg.db
