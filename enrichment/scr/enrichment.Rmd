@@ -8,10 +8,11 @@ date: "`r format(Sys.time(), '%d %B, %Y')`"
 output:
   html_document:
     keep_md: true
+    toc: true
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo=TRUE, warning=FALSE, eval=TRUE)
+knitr::opts_chunk$set(echo=TRUE, warning=FALSE, eval=TRUE, fig.width=10)
 knitr::opts_knit$set(root.dir = '../')
 ```
 
@@ -93,83 +94,18 @@ ego <- function(pattern_data){
                            pvalueCutoff  = 0.01,
                            qvalueCutoff  = 0.05,
                            readable      = TRUE)
-   file_name <- paste("GO_results/clusterprofiler/",
+   file_name <- paste("results/clusterprofiler/",
                       deparse(substitute(pattern_data)),
                       "_GO_enrich.csv", sep = "")
    write.table(as.data.frame(ego_pattern), file_name, row.names = F, sep = "\t")
    return(ego_pattern)
 }
-```
 
-### GO
-
-#### pattern2.FDR0.05 (LFD specific)
-
-```{r}
-ego_pattern2.FDR0.05 <- ego(pattern2.FDR0.05)
-ego_pattern2.FDR0.05_n  <- dim(ego_pattern2.FDR0.05)[1]
-ego_pattern2.FDR0.05_n
-```
-
-```{r,fig.width=10, fig.height=4}
-barplot(ego_pattern2.FDR0.05, showCategory=ego_pattern2.FDR0.05_n)
-```
-
-```{r,fig.width=10, fig.height=5}
-dotplot(ego_pattern2.FDR0.05, showCategory=ego_pattern2.FDR0.05_n)
-```
-
-```{r,fig.width=10, fig.height=5}
-heatplot(ego_pattern2.FDR0.05)
-```
-
-#### pattern3.FDR0.05 (Lingon specific)
-
-```{r}
-ego_pattern3.FDR0.05 <- ego(pattern3.FDR0.05)
-ego_pattern3.FDR0.05_n  <- dim(ego_pattern3.FDR0.05)[1]
-ego_pattern3.FDR0.05_n
-```
-
-```{r,fig.width=10, fig.height=2}
-barplot(ego_pattern3.FDR0.05,showCategory=ego_pattern3.FDR0.05_n,drop=T)
-```
-
-```{r,fig.width=10, fig.height=2}
-dotplot(ego_pattern3.FDR0.05,showCategory=ego_pattern3.FDR0.05_n)
-```
-
-```{r,fig.width=10, fig.height=2}
-heatplot(ego_pattern3.FDR0.05)
-```
-
-#### pattern4.FDR0.05 (HFD specific)
-
-```{r}
-ego_pattern4.FDR0.05 <- ego(pattern4.FDR0.05)
-ego_pattern4.FDR0.05_n  <- dim(ego_pattern4.FDR0.05)[1]
-ego_pattern4.FDR0.05_n
-```
-
-```{r,fig.width=10, fig.height=2}
-barplot(ego_pattern4.FDR0.05,showCategory=ego_pattern4.FDR0.05_n,drop=T)
-```
-
-```{r,fig.width=10, fig.height=2}
-dotplot(ego_pattern4.FDR0.05,showCategory=ego_pattern4.FDR0.05_n)
-```
-
-```{r,fig.width=10, fig.height=2}
-heatplot(ego_pattern4.FDR0.05)
-```
-
-### KEGG
-
-```{r, message=F}
 full_entrez <- bitr(full_gene[,1],
                     fromType = "ENSEMBL",
                     toType = "ENTREZID",
                    OrgDb = org.Mm.eg.db)
+
 eKEGG <- function(pattern_data){
    pattern_entrez <- bitr(pattern_data[,1],
                     fromType = "ENSEMBL",
@@ -183,7 +119,7 @@ eKEGG <- function(pattern_data){
    eKEGG_pattern_genes <- setReadable(eKEGG_pattern,
                                       OrgDb = org.Mm.eg.db,
                                       keyType="ENTREZID")
-   file_name <- paste("GO_results/clusterprofiler/",
+   file_name <- paste("results/clusterprofiler/",
                       deparse(substitute(pattern_data)),
                       "_KEGG_enrich.csv", sep = "")
    write.table(as.data.frame(eKEGG_pattern_genes),
@@ -192,21 +128,100 @@ eKEGG <- function(pattern_data){
 }
 ```
 
-#### pattern2.FDR0.05 (LFD specific)
+### GO pattern2.FDR0.05 (LFD specific)
+
+```{r}
+ego_pattern2.FDR0.05 <- ego(pattern2.FDR0.05)
+ego_pattern2.FDR0.05_n  <- dim(ego_pattern2.FDR0.05)[1]
+ego_pattern2.FDR0.05_n
+```
+
+Gene counts and significance of enrichment:
+
+```{r}
+barplot(ego_pattern2.FDR0.05, showCategory=ego_pattern2.FDR0.05_n)
+```
+
+Gene ratio, counts and significance of enrichment:
+
+```{r}
+dotplot(ego_pattern2.FDR0.05, showCategory=ego_pattern2.FDR0.05_n)
+```
+
+Differentially expressed genes that belong enriched terms:
+
+```{r}
+heatplot(ego_pattern2.FDR0.05)
+```
+
+### GO pattern3.FDR0.05 (Lingon specific)
+
+```{r}
+ego_pattern3.FDR0.05 <- ego(pattern3.FDR0.05)
+ego_pattern3.FDR0.05_n  <- dim(ego_pattern3.FDR0.05)[1]
+ego_pattern3.FDR0.05_n
+```
+
+Gene counts and significance of enrichment:
+
+```{r}
+barplot(ego_pattern3.FDR0.05,showCategory=ego_pattern3.FDR0.05_n,drop=T)
+```
+
+Gene ratio, counts and significance of enrichment:
+
+```{r}
+dotplot(ego_pattern3.FDR0.05,showCategory=ego_pattern3.FDR0.05_n)
+```
+
+Differentially expressed genes that belong enriched terms:
+
+```{r}
+heatplot(ego_pattern3.FDR0.05)
+```
+
+### GO pattern4.FDR0.05 (HFD specific)
+
+```{r}
+ego_pattern4.FDR0.05 <- ego(pattern4.FDR0.05)
+ego_pattern4.FDR0.05_n  <- dim(ego_pattern4.FDR0.05)[1]
+ego_pattern4.FDR0.05_n
+```
+
+Gene counts and significance of enrichment:
+
+```{r}
+barplot(ego_pattern4.FDR0.05,showCategory=ego_pattern4.FDR0.05_n,drop=T)
+```
+
+Gene ratio, counts and significance of enrichment:
+
+```{r}
+dotplot(ego_pattern4.FDR0.05,showCategory=ego_pattern4.FDR0.05_n)
+```
+
+Differentially expressed genes that belong enriched terms:
+
+```{r}
+heatplot(ego_pattern4.FDR0.05)
+```
+
+
+### KEGG pattern2.FDR0.05 (LFD specific)
 
 ```{r, message=F}
 eKEGG_pattern2.FDR0.05 <- eKEGG(pattern2.FDR0.05)
 knitr::kable(as.data.frame(eKEGG_pattern2.FDR0.05))
 ```
 
-#### pattern3.FDR0.05 (Lingon specific)
+### KEGG pattern3.FDR0.05 (Lingon specific)
 
 ```{r, message=F}
 eKEGG_pattern3.FDR0.05 <- eKEGG(pattern3.FDR0.05)
 knitr::kable(as.data.frame(eKEGG_pattern3.FDR0.05))
 ```
 
-#### pattern4.FDR0.05 (HFD specific)
+### KEGG pattern4.FDR0.05 (HFD specific)
 
 ```{r, message=F}
 eKEGG_pattern4.FDR0.05 <- eKEGG(pattern4.FDR0.05)
@@ -228,7 +243,7 @@ ggo <- function(pattern_data){
                         organism ='mmusculus',
                         significant = TRUE,
                         evcodes=TRUE)
-   file_name <- paste("GO_results/gprofiler/",
+   file_name <- paste("results/gprofiler/",
                       deparse(substitute(pattern_data)),
                       "_gProfiler_enrich.csv", sep = "")
    write.table(as.data.frame(gost_pattern$result[,namesP]),
@@ -257,3 +272,8 @@ gostplot(gost_pattern3)
 gost_pattern4 <- ggo(pattern4.FDR0.05)
 gostplot(gost_pattern4)
 ```
+
+## Results tables
+
+- `results/clusterprofiler/` - clusterProfiler GO and KEGG enrichment results.
+- `results/gprofiler/` - gProfiler GO, KEGG, Reactome, and WikiPathways enrichment results.
