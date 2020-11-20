@@ -1,0 +1,31 @@
+"ONTOLOGY"	"ID"	"Description"	"GeneRatio"	"BgRatio"	"pvalue"	"p.adjust"	"qvalue"	"geneID"	"Count"
+"BP"	"GO:0042730"	"fibrinolysis"	"6/144"	"18/17062"	5.55869703841526e-09	1.40357100219985e-05	1.27089368078294e-05	"Serpine1/Fga/Fgg/Fgb/Plg/F2"	6
+"BP"	"GO:0030195"	"negative regulation of blood coagulation"	"7/144"	"46/17062"	1.07097569225775e-07	7.88793202730114e-05	7.14229843180743e-05	"Serpine1/Fga/Kng1/Fgg/Fgb/Plg/F2"	7
+"BP"	"GO:0050819"	"negative regulation of coagulation"	"7/144"	"47/17062"	1.24957339046355e-07	7.88793202730114e-05	7.14229843180743e-05	"Serpine1/Fga/Kng1/Fgg/Fgb/Plg/F2"	7
+"BP"	"GO:1900047"	"negative regulation of hemostasis"	"7/144"	"47/17062"	1.24957339046355e-07	7.88793202730114e-05	7.14229843180743e-05	"Serpine1/Fga/Kng1/Fgg/Fgb/Plg/F2"	7
+"BP"	"GO:0030193"	"regulation of blood coagulation"	"8/144"	"80/17062"	3.67706644569193e-07	0.000170487843158274	0.000154371900089535	"Serpine1/Fga/Kng1/Fgg/Fgb/Plg/F2/F2r"	8
+"BP"	"GO:1900046"	"regulation of hemostasis"	"8/144"	"81/17062"	4.0511962730679e-07	0.000170487843158274	0.000154371900089535	"Serpine1/Fga/Kng1/Fgg/Fgb/Plg/F2/F2r"	8
+"BP"	"GO:0050818"	"regulation of coagulation"	"8/144"	"83/17062"	4.89803594517315e-07	0.000176679153736603	0.000159977955983701	"Serpine1/Fga/Kng1/Fgg/Fgb/Plg/F2/F2r"	8
+"BP"	"GO:0061045"	"negative regulation of wound healing"	"7/144"	"68/17062"	1.66176963821726e-06	0.000524496042062322	0.000474916270290511	"Serpine1/Fga/Kng1/Fgg/Fgb/Plg/F2"	7
+"BP"	"GO:0034116"	"positive regulation of heterotypic cell-cell adhesion"	"4/144"	"14/17062"	4.56134996182101e-06	0.00121249943013254	0.00109788379874847	"Fga/Gcnt2/Fgg/Fgb"	4
+"BP"	"GO:1902042"	"negative regulation of extrinsic apoptotic signaling pathway via death domain receptors"	"5/144"	"30/17062"	4.80197794111898e-06	0.00121249943013254	0.00109788379874847	"Serpine1/Fga/Gsk3b/Fgg/Fgb"	5
+"BP"	"GO:2000352"	"negative regulation of endothelial cell apoptotic process"	"5/144"	"32/17062"	6.69419908131767e-06	0.00153662297093883	0.00139136845977244	"Ramp2/Serpine1/Fga/Fgg/Fgb"	5
+"BP"	"GO:1903035"	"negative regulation of response to wounding"	"7/144"	"86/17062"	8.11700183295286e-06	0.00170795246901716	0.00154650245448891	"Serpine1/Fga/Kng1/Fgg/Fgb/Plg/F2"	7
+"BP"	"GO:0061041"	"regulation of wound healing"	"8/144"	"139/17062"	2.35127290412238e-05	0.00456689544839154	0.00413519412773588	"Serpine1/Fga/Kng1/Fgg/Fgb/Plg/F2/F2r"	8
+"BP"	"GO:0031639"	"plasminogen activation"	"4/144"	"22/17062"	3.16269666825848e-05	0.00570414934810904	0.00516494523568227	"Serpine1/Fga/Fgg/Fgb"	4
+"BP"	"GO:0010883"	"regulation of lipid storage"	"5/144"	"48/17062"	5.10704020623999e-05	0.00734560754726147	0.00665123901725978	"Mest/Cidea/Apoc4/Apob/Acacb"	5
+"BP"	"GO:1902041"	"regulation of extrinsic apoptotic signaling pathway via death domain receptors"	"5/144"	"48/17062"	5.10704020623999e-05	0.00734560754726147	0.00665123901725978	"Serpine1/Fga/Gsk3b/Fgg/Fgb"	5
+"BP"	"GO:0010884"	"positive regulation of lipid storage"	"4/144"	"25/17062"	5.36276493045535e-05	0.00734560754726147	0.00665123901725978	"Cidea/Apoc4/Apob/Acacb"	4
+"BP"	"GO:0034114"	"regulation of heterotypic cell-cell adhesion"	"4/144"	"25/17062"	5.36276493045535e-05	0.00734560754726147	0.00665123901725978	"Fga/Gcnt2/Fgg/Fgb"	4
+"BP"	"GO:1904036"	"negative regulation of epithelial cell apoptotic process"	"5/144"	"49/17062"	5.64901512729181e-05	0.00734560754726147	0.00665123901725978	"Ramp2/Serpine1/Fga/Fgg/Fgb"	5
+"BP"	"GO:0051235"	"maintenance of location"	"11/144"	"306/17062"	5.81830300773185e-05	0.00734560754726147	0.00665123901725978	"Mest/Cidea/Anxa6/Apoc4/Apob/Ffar2/Gaa/Acacb/F2/Chchd10/F2r"	11
+"BP"	"GO:0019915"	"lipid storage"	"6/144"	"82/17062"	6.72948765580338e-05	0.00741805606086305	0.00671683908877313	"Mest/Cidea/Apoc4/Apob/Ffar2/Acacb"	6
+"BP"	"GO:0007596"	"blood coagulation"	"8/144"	"162/17062"	7.00747041931113e-05	0.00741805606086305	0.00671683908877313	"Serpine1/Fga/Kng1/Fgg/Fgb/Plg/F2/F2r"	8
+"BP"	"GO:0030194"	"positive regulation of blood coagulation"	"4/144"	"27/17062"	7.34314471548928e-05	0.00741805606086305	0.00671683908877313	"Serpine1/Plg/F2/F2r"	4
+"BP"	"GO:1900048"	"positive regulation of hemostasis"	"4/144"	"27/17062"	7.34314471548928e-05	0.00741805606086305	0.00671683908877313	"Serpine1/Plg/F2/F2r"	4
+"BP"	"GO:0007599"	"hemostasis"	"8/144"	"164/17062"	7.63839435970057e-05	0.00741805606086305	0.00671683908877313	"Serpine1/Fga/Kng1/Fgg/Fgb/Plg/F2/F2r"	8
+"BP"	"GO:0050817"	"coagulation"	"8/144"	"164/17062"	7.63839435970057e-05	0.00741805606086305	0.00671683908877313	"Serpine1/Fga/Kng1/Fgg/Fgb/Plg/F2/F2r"	8
+"BP"	"GO:2000351"	"regulation of endothelial cell apoptotic process"	"5/144"	"55/17062"	9.8956277634992e-05	0.00925424448253166	0.00837945555646014	"Ramp2/Serpine1/Fga/Fgg/Fgb"	5
+"BP"	"GO:1902373"	"negative regulation of mRNA catabolic process"	"5/144"	"56/17062"	0.000107925628122447	0.00973257896461354	0.00881257384518629	"Dazl/Pkp1/Hnrnpa0/Igf2bp1/Fmr1"	5
+"BP"	"GO:0050820"	"positive regulation of coagulation"	"4/144"	"30/17062"	0.000112434597239298	0.00978956406997335	0.00886417223970072	"Serpine1/Plg/F2/F2r"	4
+"MF"	"GO:0005496"	"steroid binding"	"8/142"	"104/16864"	2.70371601040427e-06	0.00105715296006807	0.000973337763745538	"Hsd11b1/Anxa6/Fabp1/Rorc/Akr1c14/Pgrmc1/Gc/Apoa2"	8
