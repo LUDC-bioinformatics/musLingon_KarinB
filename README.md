@@ -4,7 +4,7 @@ author:
    name: "Dmytro Kryvokhyzha & Shuyi Li"
    email: dmytro.kryvokhyzha@med.lu.se
    affiliation: LUDC Bioinformatics Unit
-date: "19 november, 2020"
+date: "21 november, 2020"
 output:
   html_document:
     keep_md: true
@@ -36,7 +36,7 @@ Each group has 5 samples.
 1. QC sequencing data (NBIS).
 2. Obtain the count data  (NBIS).
 3. Compare HFD vs LFD vs Lingon (NBIS).
-4. Perform GO enrichment analysis (LUDC-BU).
+4. Perform enrichment analysis (LUDC-BU).
 5. Check interesting GO (LUDC-BU):
   - glucose metabolism
   - adipogenesis
@@ -89,7 +89,7 @@ files as described below. We also removed redundant or unnecessary files.
 
   -- `nbis/Analysis/tests-or-failed/` - failed and test runs that were not used to produce the final results [to remove].
 
-### Final results
+### Final results files
 
 These are the most important files used to produce the final results:
 
@@ -107,7 +107,9 @@ These are the most important files used to produce the final results:
 
 -  `/nbis/Analysis/final/EBSeq_2.3.rsem_star/` - *EBSeq* differential expression results (symlink to `nbis/Analysis/final/2.3.rsem_star/Matrix/`).
 
-## Analysis
+- `enrichment/` - enrichment results and GO annotation performed by LUDC-BU. See below.
+
+## Analysis (NBIS)
 
 These are the analysis steps which we recovered from the available files and scripts.
 Except the GO enrichment analysis, which was done by us
@@ -238,16 +240,7 @@ Patterns indicate the following:
 - *Pattern3* - Lingon specific (genes differ from HFD & LFD).
 - *Pattern4* - HFD specific (genes differ from Lingon and LFD).
 
-### GO enrichment analysis
-
-
-### Interesting GO terms
-
-  - glucose metabolism
-  - adipogenesis
-  - mitochondria functions
-  
-## Results
+### Results
 
 We copied the essential results files to `results/`:
 
@@ -256,3 +249,47 @@ We copied the essential results files to `results/`:
 - `results/EBSeq` - differential expression results.
 
 See the description of the files in the analysis steps.
+
+## Analysis (LUDC-BU)
+
+All alaysis related files (code, intermidiate files etc.) are located in `enrichment/`.
+
+The main results files are located in `results/enrichment/`. See below.
+
+### Enrichment analysis
+
+We performed the enrichment analysis with two programs: clusterProfiler and gProfiler.
+They produce slightly different results: clusterProfiler is more conservative, while
+gProfiler tests enrichment in Reactome and WikiPathways in addition to GO and KEGG.
+
+- `results/enrichment/enrichment.html` - report describing the analyses.
+- `results/enrichment/clusterprofiler/` - clusterProfiler GO and KEGG enrichment results.
+- `results/enrichment/gprofiler/` - gProfiler GO, KEGG, Reactome, and WikiPathways enrichment results.
+
+### Interesting GO terms
+
+Genes related to these functions are of main interested:
+
+  - glucose metabolism
+  - adipogenesis
+  - mitochondria functions
+
+We have not seen enrichment that can be associated to these functions.
+So, we annotated all analysed genes with GO and searched for these function 
+among them to see how these genes are expressed.
+
+`results/enrichment/GeneMat_HFD_Lingon_LDF.Ebseqresults.GOannotation` - expression results and GO annotation for all genes.
+
+`results/enrichment/GeneMat_HFD_Lingon_LDF.Ebseqresults.GOannotation_FDR0.05` - subset the differentially expressed genes (FDR=0.05) from this dataset.
+
+`results/enrichment/GeneMat_HFD_Lingon_LDF.Ebseqresults.GOannotation_FDR0.05_glucose-adipo-mitoch` - subset the differentially expressed genes (FDR=0.05) that have terms including words `glucose`, `adipo`, `mitoch`
+
+Column names:
+
+- `HDF Lingon LFD` - mean expression in each condition.
+- `*.rsem.genes.results` - the median normalized count for each sample.
+- `Pattern1`,	`Pattern2`,	`Pattern3`,	`Pattern4`,	`Pattern5` - posterior probability of the pattern (see above).
+- `MAP`  - most likely pattern of differential expression.
+- `PPDE` - posterior probability that gene is differentially expressed.
+- `Go_id`, `Go_term` - GO annotation of a gene with terms separated by `|`.
+- `Go_num` - number of GO terms associated with that gene.

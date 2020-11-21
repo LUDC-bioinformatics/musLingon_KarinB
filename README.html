@@ -435,7 +435,7 @@ summary {
 <address class="author_afil">
 LUDC Bioinformatics Unit<br><a class="author_email" href="mailto:#"><a href="mailto:dmytro.kryvokhyzha@med.lu.se" class="email">dmytro.kryvokhyzha@med.lu.se</a></a>
 </address>
-<h4 class="date">19 november, 2020</h4>
+<h4 class="date">21 november, 2020</h4>
 
 </div>
 
@@ -445,17 +445,19 @@ LUDC Bioinformatics Unit<br><a class="author_email" href="mailto:#"><a href="mai
 <li><a href="#data">Data</a><ul>
 <li><a href="#original-data">Original data</a></li>
 <li><a href="#current-data-structure">Current data structure</a></li>
-<li><a href="#final-results">Final results</a></li>
+<li><a href="#final-results-files">Final results files</a></li>
 </ul></li>
-<li><a href="#analysis">Analysis</a><ul>
+<li><a href="#analysis-nbis">Analysis (NBIS)</a><ul>
 <li><a href="#qc-sequencing-data">QC sequencing data</a></li>
 <li><a href="#map-and-count">Map and count</a></li>
 <li><a href="#mapping-quality-control">Mapping Quality Control</a></li>
 <li><a href="#compare-hfd-vs-lfd-vs-lingon">Compare HFD vs LFD vs Lingon</a></li>
-<li><a href="#go-enrichment-analysis">GO enrichment analysis</a></li>
+<li><a href="#results">Results</a></li>
+</ul></li>
+<li><a href="#analysis-ludc-bu">Analysis (LUDC-BU)</a><ul>
+<li><a href="#enrichment-analysis">Enrichment analysis</a></li>
 <li><a href="#interesting-go-terms">Interesting GO terms</a></li>
 </ul></li>
-<li><a href="#results">Results</a></li>
 </ul>
 </div>
 
@@ -476,7 +478,7 @@ LUDC Bioinformatics Unit<br><a class="author_email" href="mailto:#"><a href="mai
 <li>QC sequencing data (NBIS).</li>
 <li>Obtain the count data (NBIS).</li>
 <li>Compare HFD vs LFD vs Lingon (NBIS).</li>
-<li>Perform GO enrichment analysis (LUDC-BU).</li>
+<li>Perform enrichment analysis (LUDC-BU).</li>
 <li>Check interesting GO (LUDC-BU):</li>
 </ol>
 <ul>
@@ -514,8 +516,8 @@ LUDC Bioinformatics Unit<br><a class="author_email" href="mailto:#"><a href="mai
 <p>– <code>nbis/Analysis/tests-or-failed/</code> - failed and test runs that were not used to produce the final results [to remove].</p></li>
 </ul>
 </div>
-<div id="final-results" class="section level3">
-<h3>Final results</h3>
+<div id="final-results-files" class="section level3">
+<h3>Final results files</h3>
 <p>These are the most important files used to produce the final results:</p>
 <ul>
 <li><p><code>nbis/Analysis/final/1.1_fastqc</code> - FASTQ quality control.</p></li>
@@ -525,11 +527,12 @@ LUDC Bioinformatics Unit<br><a class="author_email" href="mailto:#"><a href="mai
 <li><p><code>nbis/Analysis/final/3.3_rseqc</code> - mapping quality control.</p></li>
 <li><p><code>nbis/Analysis/final/4.3_multiQC/</code> - summary of all quality control runs.</p></li>
 <li><p><code>/nbis/Analysis/final/EBSeq_2.3.rsem_star/</code> - <em>EBSeq</em> differential expression results (symlink to <code>nbis/Analysis/final/2.3.rsem_star/Matrix/</code>).</p></li>
+<li><p><code>enrichment/</code> - enrichment results and GO annotation performed by LUDC-BU. See below.</p></li>
 </ul>
 </div>
 </div>
-<div id="analysis" class="section level2">
-<h2>Analysis</h2>
+<div id="analysis-nbis" class="section level2">
+<h2>Analysis (NBIS)</h2>
 <p>These are the analysis steps which we recovered from the available files and scripts. Except the GO enrichment analysis, which was done by us because it was not possible to recover it from the data we received.</p>
 <div id="qc-sequencing-data" class="section level3">
 <h3>QC sequencing data</h3>
@@ -625,20 +628,8 @@ rsem-run-ebseq Matrix/GeneMat_HFD_Lingon_LDF.tab 5,5,5 Matrix/GeneMat_HFD_Lingon
 <li><em>Pattern4</em> - HFD specific (genes differ from Lingon and LFD).</li>
 </ul>
 </div>
-<div id="go-enrichment-analysis" class="section level3">
-<h3>GO enrichment analysis</h3>
-</div>
-<div id="interesting-go-terms" class="section level3">
-<h3>Interesting GO terms</h3>
-<ul>
-<li>glucose metabolism</li>
-<li>adipogenesis</li>
-<li>mitochondria functions</li>
-</ul>
-</div>
-</div>
-<div id="results" class="section level2">
-<h2>Results</h2>
+<div id="results" class="section level3">
+<h3>Results</h3>
 <p>We copied the essential results files to <code>results/</code>:</p>
 <ul>
 <li><code>results/RSEM/*.results</code> - gene and isoform counts.</li>
@@ -646,6 +637,44 @@ rsem-run-ebseq Matrix/GeneMat_HFD_Lingon_LDF.tab 5,5,5 Matrix/GeneMat_HFD_Lingon
 <li><code>results/EBSeq</code> - differential expression results.</li>
 </ul>
 <p>See the description of the files in the analysis steps.</p>
+</div>
+</div>
+<div id="analysis-ludc-bu" class="section level2">
+<h2>Analysis (LUDC-BU)</h2>
+<p>All alaysis related files (code, intermidiate files etc.) are located in <code>enrichment/</code>.</p>
+<p>The main results files are located in <code>results/enrichment/</code>. See below.</p>
+<div id="enrichment-analysis" class="section level3">
+<h3>Enrichment analysis</h3>
+<p>We performed the enrichment analysis with two programs: clusterProfiler and gProfiler. They produce slightly different results: clusterProfiler is more conservative, while gProfiler tests enrichment in Reactome and WikiPathways in addition to GO and KEGG.</p>
+<ul>
+<li><code>results/enrichment/enrichment.html</code> - report describing the analyses.</li>
+<li><code>results/enrichment/clusterprofiler/</code> - clusterProfiler GO and KEGG enrichment results.</li>
+<li><code>results/enrichment/gprofiler/</code> - gProfiler GO, KEGG, Reactome, and WikiPathways enrichment results.</li>
+</ul>
+</div>
+<div id="interesting-go-terms" class="section level3">
+<h3>Interesting GO terms</h3>
+<p>Genes related to these functions are of main interested:</p>
+<ul>
+<li>glucose metabolism</li>
+<li>adipogenesis</li>
+<li>mitochondria functions</li>
+</ul>
+<p>We have not seen enrichment that can be associated to these functions. So, we annotated all analysed genes with GO and searched for these function among them to see how these genes are expressed.</p>
+<p><code>results/enrichment/GeneMat_HFD_Lingon_LDF.Ebseqresults.GOannotation</code> - expression results and GO annotation for all genes.</p>
+<p><code>results/enrichment/GeneMat_HFD_Lingon_LDF.Ebseqresults.GOannotation_FDR0.05</code> - subset the differentially expressed genes (FDR=0.05) from this dataset.</p>
+<p><code>results/enrichment/GeneMat_HFD_Lingon_LDF.Ebseqresults.GOannotation_FDR0.05_glucose-adipo-mitoch</code> - subset the differentially expressed genes (FDR=0.05) that have terms including words <code>glucose</code>, <code>adipo</code>, <code>mitoch</code></p>
+<p>Column names:</p>
+<ul>
+<li><code>HDF Lingon LFD</code> - mean expression in each condition.</li>
+<li><code>*.rsem.genes.results</code> - the median normalized count for each sample.</li>
+<li><code>Pattern1</code>, <code>Pattern2</code>, <code>Pattern3</code>, <code>Pattern4</code>, <code>Pattern5</code> - posterior probability of the pattern (see above).</li>
+<li><code>MAP</code> - most likely pattern of differential expression.</li>
+<li><code>PPDE</code> - posterior probability that gene is differentially expressed.</li>
+<li><code>Go_id</code>, <code>Go_term</code> - GO annotation of a gene with terms separated by <code>|</code>.</li>
+<li><code>Go_num</code> - number of GO terms associated with that gene.</li>
+</ul>
+</div>
 </div>
 
 
