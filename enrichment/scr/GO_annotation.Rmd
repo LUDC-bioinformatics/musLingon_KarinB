@@ -7,12 +7,11 @@ author:
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 output:
   html_document:
-    keep_md: true
     toc: true
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo=TRUE, warning=FALSE, eval=TRUE)
+knitr::opts_chunk$set(echo=TRUE, warning=FALSE, eval=FALSE)
 knitr::opts_knit$set(root.dir = '../')
 ```
 
@@ -75,3 +74,26 @@ scr/go_parser.py \
    -a Matrix/Ensemble_GO.csv \
    -o results/GeneMat_HFD_Lingon_LDF.Ebseqresults.GOannotation
 ```
+
+## Subset 
+
+Subset the differentially expressed genes (FDR=0.05) from this dataset:
+
+```{bash}
+awk '$26>=0.95 {print $0}' \
+   results/enrichment/GeneMat_HFD_Lingon_LDF.Ebseqresults.GOannotation \
+   > results/enrichment/GeneMat_HFD_Lingon_LDF.Ebseqresults.GOannotation_FDR0.05
+```
+
+## Interesting functions
+
+Subset the differentially expressed genes (FDR=0.05) that have terms including 
+words `glucose`, `adipo`, `mitoch`:
+
+```{bash}
+grep -E "glucose|adipo|mitoch" \
+   results/enrichment/GeneMat_HFD_Lingon_LDF.Ebseqresults.GOannotation_FDR0.05 \
+   > results/enrichment/GeneMat_HFD_Lingon_LDF.Ebseqresults.GOannotation_FDR0.05_glucose-adipo-mitoch
+```
+
+Nothing found.
