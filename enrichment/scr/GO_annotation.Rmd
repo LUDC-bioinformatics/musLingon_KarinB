@@ -1,0 +1,66 @@
+---
+title: "LingonProj Gene Ontology Analysis"
+author:
+   name: "Shuyi Li"
+   email: shuyi.li@med.lu.se
+   affiliation: LUDC Bioinformatics Unit
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output:
+  html_document:
+    keep_md: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo=TRUE, warning=FALSE, eval=TRUE)
+knitr::opts_knit$set(root.dir = '../')
+```
+
+## GO annotaion
+
+### Load data
+```{r}
+pattern_tab <- read.table("Matrix/GeneMat_HFD_Lingon_LDF.Ebseqresults", header = TRUE)
+pattern_tab <- tibble::rownames_to_column(pattern_tab, "gene")
+mean_tab <- read.table("Matrix/GeneMat_HFD_Lingon_LDF.Ebseqresults.condmeans", header = TRUE)
+mean_tab <- tibble::rownames_to_column(mean_tab, "gene")
+names(mean_tab) <- c("gene","HDF","Lingon","LFD")
+norm_tab <- read.table("Matrix/GeneMat_HFD_Lingon_LDF.Ebseqresults.normalized_data_matrix", header = TRUE)
+norm_tab <- tibble::rownames_to_column(norm_tab, "gene")
+full_gene <- read.table("Matrix/full_gene_list.csv", header = FALSE)
+names(full_gene) <- c("EnsemblID","GeneSymbol")
+```
+
+```{r,message=FALSE}
+#load packages
+library(org.Mm.eg.db)
+library(gprofiler2)
+library(dplyr)
+```
+
+### Merge data
+```{r}
+full_info_tab <- left_join(mean_tab, norm_tab, by = "gene")
+full_info_tab <- full_join(full_info_tab,pattern_tab, by = "gene")
+full_info_tab <- cbind(full_info_tab,full_gene)
+```
+
+### Convert Ensemblid to GO id
+```{r}
+id_go <- gconvert(full_gene[,1], organism="mmusculus", target="GO")
+```
+
+```{r}
+# write table
+write.table(id_go, file = "Matrix/Ensemble_GO.csv",row.names = F)
+write.table(full_info_tab, file = "Matrix/GeneMat_HFD_Lingon_LDF.Ebseqresults.fullinfo",row.names = F)
+```
+
+### GO annotaion using goatools
+```{bash}
+#Download GO reference
+wget http://geneontology.org/ontology/go-basic.obo
+mv go-basic.obo reference/
+#GO annotation
+scr/go_parser.py -i Matrix/GeneMat_HFD_Lingon_LDF.Ebseqresults.fullinfo -a Matrix/Ensemble_GO.csv -o GO_results/GeneMat_HFD_Lingon_LDF.Ebseqresults.GOannotation
+```
+
