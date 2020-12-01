@@ -4,11 +4,11 @@ author:
    name: "Dmytro Kryvokhyzha & Shuyi Li"
    email: dmytro.kryvokhyzha@med.lu.se
    affiliation: LUDC Bioinformatics Unit
-date: "21 november, 2020"
+date: "01 december, 2020"
 output:
-  html_document:
-    keep_md: true
-    toc: true
+    html_document:
+      keep_md: true
+      toc: true
 ---
 
 
@@ -252,7 +252,7 @@ See the description of the files in the analysis steps.
 
 ## Analysis (LUDC-BU)
 
-All alaysis related files (code, intermidiate files etc.) are located in `enrichment/`.
+All analysis related files (code, intermediate files etc.) are located in `enrichment/`.
 
 The main results files are located in `results/enrichment/`. See below.
 
@@ -278,11 +278,11 @@ We have not seen enrichment that can be associated to these functions.
 So, we annotated all analysed genes with GO and searched for these function 
 among them to see how these genes are expressed.
 
-`results/enrichment/GeneMat_HFD_Lingon_LDF.Ebseqresults.GOannotation` - expression results and GO annotation for all genes.
+`results/enrichment/GeneMat_HFD_Lingon_LDF.Ebseqresults.GOannotation.csv` - expression results and GO annotation for all genes.
 
-`results/enrichment/GeneMat_HFD_Lingon_LDF.Ebseqresults.GOannotation_FDR0.05` - subset the differentially expressed genes (FDR=0.05) from this dataset.
+`results/enrichment/GeneMat_HFD_Lingon_LDF.Ebseqresults.GOannotation_FDR0.05.csv` - subset the differentially expressed genes (FDR=0.05) from this dataset.
 
-`results/enrichment/GeneMat_HFD_Lingon_LDF.Ebseqresults.GOannotation_FDR0.05_glucose-adipo-mitoch` - subset the differentially expressed genes (FDR=0.05) that have terms including words `glucose`, `adipo`, `mitoch`
+`results/enrichment/GeneMat_HFD_Lingon_LDF.Ebseqresults.GOannotation_FDR0.05_glucose-adipo-mitoch.csv` - subset the differentially expressed genes (FDR=0.05) that have terms including words `glucose`, `adipo`, `mitoch`
 
 Column names:
 
@@ -293,3 +293,6 @@ Column names:
 - `PPDE` - posterior probability that gene is differentially expressed.
 - `Go_id`, `Go_term` - GO annotation of a gene with terms separated by `|`.
 - `Go_num` - number of GO terms associated with that gene.
+
+
+  

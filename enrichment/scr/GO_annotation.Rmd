@@ -72,7 +72,9 @@ GO annotation:
 scr/go_parser.py \
    -i Matrix/GeneMat_HFD_Lingon_LDF.Ebseqresults.fullinfo \
    -a Matrix/Ensemble_GO.csv \
-   -o results/GeneMat_HFD_Lingon_LDF.Ebseqresults.GOannotation
+   -o ../results/enrichment/GeneMat_HFD_Lingon_LDF.Ebseqresults.GOannotation.csv
+sed -i 's/.rsem.genes.results//g;s/"//g' \
+   ../results/enrichment/GeneMat_HFD_Lingon_LDF.Ebseqresults.GOannotation.csv
 ```
 
 ## Subset 
@@ -80,9 +82,10 @@ scr/go_parser.py \
 Subset the differentially expressed genes (FDR=0.05) from this dataset:
 
 ```{bash}
-awk '$26>=0.95 {print $0}' \
-   results/enrichment/GeneMat_HFD_Lingon_LDF.Ebseqresults.GOannotation \
-   > results/enrichment/GeneMat_HFD_Lingon_LDF.Ebseqresults.GOannotation_FDR0.05
+cd ..
+awk '$26>=0.95 || NR==1 {print $0}' \
+   results/enrichment/GeneMat_HFD_Lingon_LDF.Ebseqresults.GOannotation.csv \
+   > results/enrichment/GeneMat_HFD_Lingon_LDF.Ebseqresults.GOannotation_FDR0.05.csv
 ```
 
 ## Interesting functions
@@ -91,9 +94,7 @@ Subset the differentially expressed genes (FDR=0.05) that have terms including
 words `glucose`, `adipo`, `mitoch`:
 
 ```{bash}
-grep -E "glucose|adipo|mitoch" \
-   results/enrichment/GeneMat_HFD_Lingon_LDF.Ebseqresults.GOannotation_FDR0.05 \
-   > results/enrichment/GeneMat_HFD_Lingon_LDF.Ebseqresults.GOannotation_FDR0.05_glucose-adipo-mitoch
+grep -E "^gene|glucose|adipo|mitoch" \
+   results/enrichment/GeneMat_HFD_Lingon_LDF.Ebseqresults.GOannotation_FDR0.05.csv \
+   > results/enrichment/GeneMat_HFD_Lingon_LDF.Ebseqresults.GOannotation_FDR0.05_glucose-adipo-mitoch.csv
 ```
-
-Nothing found.
