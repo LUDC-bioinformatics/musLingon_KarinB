@@ -1,0 +1,20 @@
+resources:
+  cores: 10
+  ram: 30G
+
+samples:
+  - HFD14
+  - HFD16
+  - HFD24
+  - HFD25
+  - HFD35
+  - LFD24
+  - LFD25
+  - LFD34
+  - LFD35
+  - LFD37
+  - Lingon14
+  - Lingon24
+  - Lingon34
+  - Lingon35
+  - Lingon36

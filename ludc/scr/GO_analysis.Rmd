@@ -1,0 +1,260 @@
+---
+title: "LingonProj Gene Ontology Analysis"
+author:
+   name: "Shuyi Li"
+   email: shuyi.li@med.lu.se
+   affiliation: LUDC Bioinformatics Unit
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output:
+  html_document:
+    keep_md: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(warning=FALSE, eval=TRUE, message=FALSE)
+knitr::opts_knit$set(root.dir = '../')
+```
+
+## Gene Set Enrichment Analysis
+(clusterProfiler v3.16.1  For help: https://guangchuangyu.github.io/software/clusterProfiler)
+
+Load data
+```{r}
+DEseq_res <- read.table("results/tables/deseq/LingonProj_DESeqres.csv", header = TRUE)
+
+```
+
+```{r,message=FALSE}
+#load packages
+library(clusterProfiler)
+library(org.Mm.eg.db)
+library(ggplot2)
+```
+
+
+### HFD vs LFD
+
+```{r}
+GO_HFD_LFD_gene_list <- DEseq_res$log2FoldChange_HFD_vs_LFD
+names(GO_HFD_LFD_gene_list) <- DEseq_res$gene
+GO_HFD_LFD_gene_list <- na.omit(GO_HFD_LFD_gene_list)
+GO_HFD_LFD_gene_list <-  sort(GO_HFD_LFD_gene_list, decreasing = TRUE)
+HFD_LFD_gse <- gseGO(geneList=GO_HFD_LFD_gene_list, 
+             ont ="ALL", 
+             keyType = "ENSEMBL", 
+             nPerm = 10000, 
+             minGSSize = 3, 
+             maxGSSize = 800, 
+             pvalueCutoff = 0.05, 
+             verbose = TRUE, 
+             OrgDb = org.Mm.eg.db, 
+             pAdjustMethod = "none")
+HFD_LFD_gse <- setReadable(HFD_LFD_gse, OrgDb = org.Mm.eg.db, keyType="ENSEMBL")
+file_name <- "results/tables/GO_results/GO_GSEA_HFD_LFD.csv"
+write.csv(as.data.frame(HFD_LFD_gse),file_name,row.names = F)
+```
+
+* Dotplot: 
+It depicts the enrichment scores (e.g. p values) and gene count or ratio.
+
+* Enrichment map: 
+Enrichment map organizes enriched terms into a network with edges connecting overlapping gene sets. In this way, mutually overlapping gene sets are tend to cluster together, making it easy to identify functional module.
+
+* Ridgeplot: 
+The ridgeplot will visualize expression distributions of core enriched genes for GSEA enriched categories. It helps users to interpret up/down-regulated pathways.
+
+
+Dotplot
+
+```{r,fig.width=10, fig.height=4}
+dotplot(HFD_LFD_gse, font.size = 11, showCategory=10, split=".sign") + facet_grid(.~.sign)
+```
+
+Enrichment map
+
+```{r,fig.width=10, fig.height=4}
+emapplot(HFD_LFD_gse, showCategory = 10)
+```
+
+Ridgeplot
+
+```{r,fig.width=10, fig.height=10}
+ridgeplot(HFD_LFD_gse) + labs(x = "enrichment distribution")
+```
+
+### HFD vs Lingon
+
+```{r}
+GO_HFD_Lingon_gene_list <- DEseq_res$log2FoldChange_HFD_vs_Lingon
+names(GO_HFD_Lingon_gene_list) <- DEseq_res$gene
+GO_HFD_Lingon_gene_list <- na.omit(GO_HFD_Lingon_gene_list)
+GO_HFD_Lingon_gene_list <-  sort(GO_HFD_Lingon_gene_list, decreasing = TRUE)
+HFD_Lingon_gse <- gseGO(geneList=GO_HFD_Lingon_gene_list, 
+             ont ="ALL", 
+             keyType = "ENSEMBL", 
+             nPerm = 10000, 
+             minGSSize = 3, 
+             maxGSSize = 800, 
+             pvalueCutoff = 0.05, 
+             verbose = TRUE, 
+             OrgDb = org.Mm.eg.db, 
+             pAdjustMethod = "none")
+HFD_Lingon_gse <- setReadable(HFD_Lingon_gse, OrgDb = org.Mm.eg.db, keyType="ENSEMBL")
+file_name <- "results/tables/GO_results/GO_GSEA_HFD_Lingon.csv"
+write.csv(as.data.frame(HFD_Lingon_gse),file_name,row.names = F)
+```
+
+Dotplot
+
+```{r,fig.width=10, fig.height=4}
+dotplot(HFD_Lingon_gse, font.size = 12, showCategory=10, split=".sign") + facet_grid(.~.sign)
+```
+
+Enrichment map
+
+```{r,fig.width=10, fig.height=4}
+emapplot(HFD_Lingon_gse, showCategory = 10)
+```
+
+Ridgeplot
+
+```{r, fig.width=10, fig.height=10}
+ridgeplot(HFD_Lingon_gse,showCategory = 15) + labs(x = "enrichment distribution")
+```
+
+
+
+### LFD vs Lingon
+
+```{r}
+GO_LFD_Lingon_gene_list <- DEseq_res$log2FoldChange_LFD_vs_Lingon
+names(GO_LFD_Lingon_gene_list) <- DEseq_res$gene
+GO_LFD_Lingon_gene_list <- na.omit(GO_LFD_Lingon_gene_list)
+GO_LFD_Lingon_gene_list <-  sort(GO_LFD_Lingon_gene_list, decreasing = TRUE)
+LFD_Lingon_gse <- gseGO(geneList=GO_LFD_Lingon_gene_list, 
+             ont ="ALL", 
+             keyType = "ENSEMBL", 
+             nPerm = 10000, 
+             minGSSize = 3, 
+             maxGSSize = 800, 
+             pvalueCutoff = 0.05, 
+             verbose = TRUE, 
+             OrgDb = org.Mm.eg.db, 
+             pAdjustMethod = "none")
+LFD_Lingon_gse <- setReadable(LFD_Lingon_gse, OrgDb = org.Mm.eg.db, keyType="ENSEMBL")
+file_name <- "results/tables/GO_results/GO_GSEA_LFD_Lingon.csv"
+write.csv(as.data.frame(LFD_Lingon_gse),file_name,row.names = F)
+```
+
+Dotplot
+
+```{r,fig.width=10, fig.height=4}
+dotplot(LFD_Lingon_gse, font.size = 12, showCategory=10, split=".sign") + facet_grid(.~.sign)
+```
+
+Enrichment map
+
+```{r,fig.width=10, fig.height=4}
+emapplot(LFD_Lingon_gse, showCategory = 10)
+```
+
+Ridgeplot
+
+```{r, fig.width=10, fig.height=10}
+ridgeplot(LFD_Lingon_gse,showCategory = 15) + labs(x = "enrichment distribution")
+```
+
+
+## Over-representation test
+
+### HFD vs LFD
+
+```{r}
+sign_genes <- gsub('\\..*', '',DEseq_res$gene[which(DEseq_res$padj_HFD_vs_LFD <= 0.1)])
+enrich_HFD_LFD <- enrichGO(gene          = sign_genes,
+                universe      = DEseq_res$gene,
+                OrgDb         = org.Mm.eg.db,
+                keyType       = "ENSEMBL",
+                ont           = "ALL",
+                pAdjustMethod = "BH",
+                pvalueCutoff  = 0.1,
+                qvalueCutoff  = 0.05,
+                readable      = TRUE)
+
+file_name <- "results/tables/GO_results/GO_enrich_HFD_LFD.csv"
+write.csv(as.data.frame(enrich_HFD_LFD),file_name,row.names = F)
+```
+
+Dotplot
+
+```{r,fig.width=10, fig.height=4}
+dotplot(enrich_HFD_LFD, font.size = 12, showCategory = 20)
+```
+
+Enrichment map
+
+```{r,fig.width=10, fig.height=3}
+emapplot(enrich_HFD_LFD)
+```
+
+### HFD vs Lingon
+
+```{r}
+sign_genes <- gsub('\\..*', '',DEseq_res$gene[which(DEseq_res$padj_HFD_vs_Lingon <= 0.1)])
+enrich_HFD_Lingon <- enrichGO(gene          = sign_genes,
+                universe      = DEseq_res$gene,
+                OrgDb         = org.Mm.eg.db,
+                keyType       = "ENSEMBL",
+                ont           = "ALL",
+                pAdjustMethod = "BH",
+                pvalueCutoff  = 0.1,
+                qvalueCutoff  = 0.05,
+                readable      = TRUE)
+file_name <- "results/tables/GO_results/GO_enrich_HFD_Lingon.csv"
+write.csv(as.data.frame(enrich_HFD_Lingon),file_name,row.names = F)
+```
+
+Dotplot
+
+```{r,fig.width=10, fig.height=4}
+dotplot(enrich_HFD_Lingon, font.size = 12, showCategory = 20)
+```
+
+Enrichment map
+
+```{r,fig.width=10, fig.height=3}
+emapplot(enrich_HFD_Lingon)
+```
+
+### LFD vs Lingon
+
+```{r}
+sign_genes <- gsub('\\..*', '',DEseq_res$gene[which(DEseq_res$padj_LFD_vs_Lingon <= 0.1)])
+enrich_LFD_Lingon <- enrichGO(gene          = sign_genes,
+                universe      = DEseq_res$gene,
+                OrgDb         = org.Mm.eg.db,
+                keyType       = "ENSEMBL",
+                ont           = "ALL",
+                pAdjustMethod = "BH",
+                pvalueCutoff  = 0.1,
+                qvalueCutoff  = 0.05,
+                readable      = TRUE)
+file_name <- "results/tables/GO_results/GO_enrich_LFD_Lingon.csv"
+write.csv(as.data.frame(enrich_LFD_Lingon),file_name,row.names = F)
+```
+
+Dotplot
+
+```{r,fig.width=10, fig.height=4}
+dotplot(enrich_LFD_Lingon, font.size = 12, showCategory = 15)
+```
+
+Enrichment map
+
+```{r,fig.width=10, fig.height=3}
+emapplot(enrich_LFD_Lingon)
+```
+
+### GO analysis results
+
+[Click HERE](../results/tables/GO_results)

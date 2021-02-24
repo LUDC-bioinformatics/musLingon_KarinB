@@ -1,0 +1,441 @@
+---
+title: "Mouse Lingon diet experiment: differential expression analysis"
+author:
+   name: "Dmytro Kryvokhyzha & Shuyi Li"
+   email: dmytro.kryvokhyzha@med.lu.se
+   affiliation: LUDC Bioinformatics Unit
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output:
+    html_document:
+      toc: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo=TRUE, eval=TRUE)
+knitr::opts_knit$set(root.dir = '../')
+```
+
+## Dependencies
+
+```{r, message=FALSE, eval=TRUE}
+library(DESeq2)
+library(tximport)
+library(RColorBrewer)
+library(ggplot2)
+library(IHW)
+library(mygene)
+library(sm)
+library(reshape2)
+library(VennDiagram)
+library(pheatmap)
+```
+
+## Data
+
+### Sample info
+
+Load the meta data:
+
+```{r}
+meta <- read.table('data/meta/Lingon_samples_RNA_seq.txt', header = T)
+row.names(meta) <- meta$sample_ID
+knitr::kable(meta)
+```
+
+### Read counts
+
+Load the raw counts data:
+
+```{r, message=FALSE, warning=FALSE}
+samples <- as.character(meta$sample_ID)
+files <- file.path('results/tables/salmon/', samples, 'quant.genes.sf.gz')
+names(files) <- samples
+read_counts <- tximport(files,
+                        type = 'salmon',
+                        txIn = F,
+                        geneIdCol = 'Name',
+                        ignoreTxVersion = TRUE)
+# remove .X from gene names e.g. ENSG00000000003.15 -> ENSG00000000003:
+row.names(read_counts$abundance) <- gsub('\\..*', '', rownames(read_counts$abundance))
+row.names(read_counts$counts) <- gsub('\\..*', '', rownames(read_counts$counts))
+row.names(read_counts$length) <- gsub('\\..*', '', rownames(read_counts$length))
+```
+
+### Library size & counts distribution
+
+Library size barplot & counts distribution boxplot
+
+```{r, fig.width=6, fig.height=8}
+condition_color <- brewer.pal(3, 'Accent')[as.factor(meta$Condition)]
+par(mfcol=c(2,1))
+# Library size
+libsize <- colSums(read_counts$counts)/1000000
+barplot(libsize,
+        ylim=c(0,15),
+        names.arg=meta$sample_ID,
+        col= condition_color,
+        ylab = 'Million reads',
+        main = 'Library size',
+        las =2)
+legend('topleft',
+       fill = c('#7FC97F', '#BEAED4', '#FDC086'),
+       legend = c('HFD','LFD','Lingon'),
+       bty = 'n')
+# counts distribution boxplot
+logCPM <- log2((read_counts$counts+1)/colSums(read_counts$counts+1)*1e+06)
+
+boxplot(logCPM,
+        xlab='',
+        ylab='Log2 counts per million',
+        notch	=F,
+        col = condition_color,
+        outline=T,
+        main = 'Counts distribution',
+        las=2)
+abline(h=median(logCPM), lty=2, col='blue')
+```
+
+Samples density plot
+
+```{r}
+logCPM_dens <- data.frame(logCPM=as.vector(t(logCPM)),
+                          samples=rep(colnames(logCPM), dim(logCPM)[1]),
+                          Condition=rep(meta$Condition, dim(logCPM)[1]))
+# samples density plot
+sm.density.compare(logCPM_dens$logCPM,
+                   logCPM_dens$samples,
+                   xlab='Log2 counts per million')
+title(main='Samples counts distribution')
+colfill<-c(2:(2+length(levels(logCPM_dens$samples)))) 
+legend('topright',
+       levels(logCPM_dens$samples),
+       col=colfill,
+       lty=c(1:length(logCPM_dens$samples)),
+       lwd=1,
+       ncol=2,
+       cex=0.7)
+```
+
+Condition density plot
+
+```{r}
+ggplot(logCPM_dens, aes(x = logCPM, colour = Condition)) +
+  geom_density(alpha = 0.5, size = 1.5) + theme_bw() +
+  theme(legend.position = 'top') + xlab(expression(log[2](count + 1)))
+```
+
+
+### DESeq object
+
+Create DESeq object:
+
+```{r, message=FALSE, error=FALSE}
+dds <- DESeqDataSetFromTximport(txi = read_counts,
+                                    colData = meta,
+                                    design= ~ Condition)
+```
+
+```{r, include=FALSE, eval=FALSE}
+#Remove low count genes
+keep <- rowSums(counts(dds)) >= dim(dds)[2]
+dds <- dds[keep,]
+sum(keep)
+```
+
+Perform variance stabilizing transformation
+
+```{r, message=FALSE, error=FALSE}
+vst <- vst(dds, blind=T)
+dds <- DESeq(dds)
+```
+
+### PCA
+
+```{r, message=FALSE, error=FALSE}
+plotPCA(vst, intgroup='Condition') + theme_bw() +
+        geom_text(label=vst$sample_ID, size=3, hjust=0.5, vjust=-0.7)
+```
+
+### Remove outliers 
+
+Remove outliers Lingon34, LFD35
+
+```{r, message=FALSE, error=FALSE}
+read_counts$abundance <- read_counts$abundance[,-c(13,9)]
+read_counts$counts <- read_counts$counts[,-c(13,9)]
+read_counts$length <- read_counts$length[,-c(13,9)]
+meta <- meta[-c(13,9),]
+dds <- DESeqDataSetFromTximport(txi = read_counts,
+                                    colData = meta,
+                                    design= ~ Condition)
+vst <- vst(dds, blind=T)
+```
+
+Re-do PCA without outliers
+
+```{r, message=FALSE, error=FALSE}
+plotPCA(vst, intgroup='Condition') + theme_bw() +
+        geom_text(label=vst$sample_ID, size=3, hjust=0.5, vjust=-0.7)
+```
+
+## Differential expression
+
+Significance level
+
+```{r}
+signLevel <- 0.1
+```
+
+### Results
+
+```{r}
+dds <- DESeq(dds)
+HFD_vs_LFD <- results(dds,
+               contrast=c('Condition', 'HFD', 'LFD'),
+               alpha=signLevel,
+               filterFun=ihw)
+HFD_vs_LFD <- HFD_vs_LFD[order(HFD_vs_LFD$padj),]
+message('HFD_vs_LFD:')
+summary(HFD_vs_LFD)
+
+HFD_vs_Lingon <- results(dds,
+               contrast=c('Condition', 'HFD', 'Lingon'),
+               alpha=signLevel,
+               filterFun=ihw)
+HFD_vs_Lingon <- HFD_vs_Lingon[order(HFD_vs_Lingon$padj),]
+message('HFD_vs_Lingon:')
+summary(HFD_vs_Lingon)
+
+LFD_vs_Lingon <- results(dds,
+               contrast=c('Condition', 'LFD', 'Lingon'),
+               alpha=signLevel,
+               filterFun=ihw)
+LFD_vs_Lingon <- LFD_vs_Lingon[order(LFD_vs_Lingon$padj),]
+message('LFD_vs_Lingon:')
+summary(LFD_vs_Lingon)
+```
+
+Volcano plot:
+
+```{r}
+plot(HFD_vs_LFD$log2FoldChange, -log10(HFD_vs_LFD$padj),
+     main='HFD_vs_LFD Volcano plot',
+     xlab='log2FC',
+     ylab='-log10(pval)',
+     pch=16, cex=0.8)
+
+plot(HFD_vs_Lingon$log2FoldChange, -log10(HFD_vs_Lingon$padj),
+     main='HFD_vs_Lingon Volcano plot',
+     xlab='log2FC',
+     ylab='-log10(pval)',
+     pch=16, cex=0.8)
+
+plot(LFD_vs_Lingon$log2FoldChange, -log10(LFD_vs_Lingon$padj),
+     main='LFD_vs_Lingon Volcano plot',
+     xlab='log2FC',
+     ylab='-log10(pval)',
+     pch=16, cex=0.8)
+```
+
+### Venndiagram
+
+```{r, fig.width=12, fig.height=5}
+select_significant <- function(res, alpha){
+  all_sign <- gsub('\\..*', '',rownames(res)[which(res$padj <= alpha)])
+  up_sign <- gsub('\\..*', '',rownames(res)[which(res$padj <= alpha & res$log2FoldChange > 0)])
+  down_sign <- gsub('\\..*', '',rownames(res)[which(res$padj <= alpha & res$log2FoldChange < 0)])
+  return(list(all_sign=all_sign, up_sign=up_sign, down_sign=down_sign))
+}
+HFD_vs_LFD_sign <- select_significant(HFD_vs_LFD, signLevel)
+HFD_vs_Lingon_sign <- select_significant(HFD_vs_Lingon, signLevel)
+LFD_vs_Lingon_sign <- select_significant(LFD_vs_Lingon, signLevel)
+comparisons_names <- c('HFD_vs_LFD',
+                       'HFD_vs_Lingon',
+                       'LFD_vs_Lingon')
+regulation <- c('all_sign', 'up_sign', 'down_sign')
+pushViewport(plotViewport(layout=grid.layout(1, 3)))
+for (i in c(1:3)){
+  r <- regulation[i]
+  comparisons_genes <- list(HFD_vs_LFD_sign[[r]],
+                            HFD_vs_Lingon_sign[[r]],
+                            LFD_vs_Lingon_sign[[r]])
+  vennPlot <- venn.diagram(comparisons_genes,
+                           NULL,
+                           fill = condition_color[c(1,6,11)],
+                           category.names = comparisons_names,
+                           main = r,
+                           cex=1.5,
+                           main.cex = 1.5,
+                           sub.cex = 1.5)
+  pushViewport(plotViewport(layout.pos.col=i))
+  grid.draw(vennPlot)
+  popViewport()
+}
+```
+
+### Annotate with gene names and summary
+
+Add TPM column (takes a while):
+
+```{r}
+read_counts_length <- read_counts$counts/read_counts$length
+dds_tpm <- t(t(read_counts_length)*1e6/colSums(read_counts_length))
+colnames(dds_tpm) <- paste(colnames(dds_tpm), 'tpm', sep = '_')
+dds_tpm <- dds_tpm[,sort(colnames(dds_tpm))]
+# calculate means
+mean_tpm <- aggregate(t(dds_tpm), list(meta$Condition), mean)
+# transform the results
+mean_tpm_names <- as.character(mean_tpm[,1])
+mean_tpm_val <- as.data.frame(t(mean_tpm[,-1]))
+colnames(mean_tpm_val) <- paste(mean_tpm_names, 'tpm', sep = '_')
+
+# function to merge
+merge2df <- function(d1, d2){
+  dd <- merge(as.data.frame(d1), as.data.frame(d2), by=0, all.x = T)
+  rownames(dd) <- dd$Row.names
+  dd$Row.names <- NULL
+  return(dd)
+}
+# rename columns
+col2keep <- c("log2FoldChange", "pvalue", "padj")
+## HFD_vs_LFD
+HFD_vs_LFD <- HFD_vs_LFD[,col2keep]
+colnames(HFD_vs_LFD) <- paste(colnames(HFD_vs_LFD), 'HFD_vs_LFD', sep = "_")
+## HFD_vs_Lingon
+HFD_vs_Lingon <- HFD_vs_Lingon[,col2keep]
+colnames(HFD_vs_Lingon) <- paste(colnames(HFD_vs_Lingon), 'HFD_vs_Lingon', sep = "_")
+## LFD_vs_Lingon
+LFD_vs_Lingon <- LFD_vs_Lingon[,col2keep]
+colnames(LFD_vs_Lingon) <- paste(colnames(LFD_vs_Lingon), 'LFD_vs_Lingon', sep = "_")
+# merge
+HFD_vs_LFD_HFD_vs_Lingon <- merge2df(HFD_vs_LFD, HFD_vs_Lingon)
+HFD_vs_LFD_HFD_vs_Lingon_LFD_vs_Lingon <- merge2df(HFD_vs_LFD_HFD_vs_Lingon, LFD_vs_Lingon)
+all3res_mean_tpm <- merge2df(HFD_vs_LFD_HFD_vs_Lingon_LFD_vs_Lingon, mean_tpm_val)
+all3res <- merge2df(all3res_mean_tpm, dds_tpm)
+all3res$gene <- row.names(all3res)
+# mv gene col to begining
+all3res <- all3res[c('gene', setdiff(names(all3res), 'gene'))]
+# order by padj
+all3res <- all3res[order(all3res$padj_HFD_vs_Lingon,
+                         all3res$padj_HFD_vs_LFD,
+                         all3res$padj_LFD_vs_Lingon, decreasing = F), ]
+knitr::kable(all3res[c(1:3),])
+```
+
+Retrieve the annotation information (takes a while):
+
+```{r, message=FALSE, echo=FALSE}
+annotAll <- queryMany(all3res$gene,
+                      scopes='ensembl.gene',
+                      fields='symbol,name,summary',
+                      return.as="DataFrame",
+                      species='mouse')
+# remove duplicated and not found rows:
+duplNoSumNoFound <- which(!duplicated(annotAll$query))
+annot <- as.data.frame(annotAll[duplNoSumNoFound,
+                                c('query', 'symbol', 'name', 'summary')])
+colnames(annot)[1] <- 'gene'
+knitr::kable(head(annot, 2))
+```
+
+Merge the annotation with the results table:
+
+```{r}
+DEresultsAnnot <- merge(all3res, annot, by='gene', all.x = T)
+rownames(DEresultsAnnot) <- DEresultsAnnot$gene
+```
+
+### Heatmap
+
+all DE genes
+
+```{r}
+heatmapAnnot <- as.data.frame(colData(dds)[,c('sample_ID', 'Condition')])
+heatmapAnnot <- heatmapAnnot[order(heatmapAnnot$Condition),]
+heatmapAnnot$sample_ID <- NULL
+sign_genes <- c(HFD_vs_LFD_sign[['all_sign']], HFD_vs_Lingon_sign[['all_sign']], LFD_vs_Lingon_sign[['all_sign']])
+
+sign_genes_heatmap <- assay(vst)[sign_genes,]
+sign_genes_symbol <- DEresultsAnnot[rownames(sign_genes_heatmap),'symbol']
+rownames(sign_genes_heatmap) <- paste(rownames(sign_genes_heatmap),
+                                       sign_genes_symbol, sep = "_")
+
+# heatmap for all DE genes
+filePath <- 'results/figures/'
+dir.create(filePath, showWarnings = FALSE)
+pdf(paste(filePath, 'heatmap_for_all_DE_genes.pdf', sep=''),
+    width = 8, 
+    height = 65)
+pheatmap(sign_genes_heatmap,
+         color = heat.colors(18, rev=T),
+         cluster_rows=TRUE,
+         cluster_cols=TRUE,
+         border_color=FALSE,
+         fontsize_row = 4,
+         annotation_col=heatmapAnnot)
+dev.off()
+```
+
+DE genes between HFD_vs_Lingon
+
+```{r}
+HFD_vs_Lingon_heatmap <- assay(vst)[HFD_vs_Lingon_sign[['all_sign']],]
+rownames(HFD_vs_Lingon_heatmap) <- DEresultsAnnot[rownames(HFD_vs_Lingon_heatmap),'symbol']
+
+pdf(paste(filePath, 'heatmap_for_DE_genes_between_HFD_vs_Lingon.pdf', sep=''),
+    width = 6, 
+    height = 7)
+pheatmap(HFD_vs_Lingon_heatmap,
+         color = heat.colors(18, rev=T),
+         cluster_rows=TRUE,
+         cluster_cols=TRUE,
+         border_color=FALSE,
+         fontsize_row = 5,
+         annotation_col=heatmapAnnot)
+dev.off()
+```
+
+[heatmap for all DE genes](results/figures/heatmap_for_all_DE_genes.pdf)
+
+[heatmap for DE genes between HFD_vs_Lingon](results/figures/heatmap_for_DE_genes_between_HFD_vs_Lingon.pdf)
+
+### Expression of top genes differentiating HFD vs Linjon
+
+```{r, fig.width=10, fig.height=5}
+HFD_vs_Lingon_sign_norm_melt <- melt(HFD_vs_Lingon_heatmap)
+colnames(HFD_vs_Lingon_sign_norm_melt) <- c("gene", "samplename", "normalized_counts")
+
+meta_exp_levels <- meta
+meta_exp_levels$samplename <- rownames(meta_exp_levels)
+HFD_vs_Lingon_sign_norm_melt <- merge(HFD_vs_Lingon_sign_norm_melt, meta_exp_levels)
+
+## plot using ggplot2
+pdf(paste(filePath, 'expression_levels_DE_genes_between_HFD_vs_Lingon.pdf', sep=''),
+    width = 10, 
+    height = 5)
+ggplot(HFD_vs_Lingon_sign_norm_melt) +
+        geom_point(aes(x = gene,
+                       y = normalized_counts,                       
+                       color = Condition,
+                       shape= Condition),
+                   position=position_jitter(w=0.2,h=0.02)) +
+        scale_y_log10() +
+        xlab("Genes") +
+        ylab("Normalized Counts") +
+        ggtitle("Expression of top genes differentiating HFD vs Linjon") +
+        theme_bw() +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1, size=5)) +
+    theme(plot.title=element_text(hjust=0.5))
+dev.off()
+```
+
+## Write results
+
+```{r, eval=FALSE}
+filePath <- 'results/tables/deseq/'
+dir.create(filePath, showWarnings = FALSE)
+write.table(DEresultsAnnot,
+            paste(filePath, 'LingonProj_DESeqres.csv', sep=''),
+            row.names = F,
+            sep = '\t')
+```
