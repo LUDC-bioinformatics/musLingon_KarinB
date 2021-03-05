@@ -4,16 +4,14 @@ author:
    name: "Shuyi Li & Dmytro Kryvokhyzha"
    email: dmytro.kryvokhyzha@med.lu.se
    affiliation: LUDC Bioinformatics Unit
-date: "`r format(Sys.time(), '%d %B, %Y')`"
+date: "02 March, 2021"
 output:
     html_document:
       keep_md: true
       toc: true
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, eval = FALSE)
-```
+
 
 
 ## Project
@@ -78,7 +76,8 @@ All the data is located on the Indigo server: `/ludc/Active_Projects/Mouse_Adipo
 
 You need to install [Conda](https://docs.conda.io/en/latest/) and load the pre-configured conda environment. It should also install all the required programs.
 
-```{bash}
+
+```bash
 conda env create -f conf/conda.yml
 conda activate LingonProj
 ```
@@ -95,7 +94,8 @@ QC reports can be found in: `~/results/reports/`
 
 Performed with [Salmon](https://salmon.readthedocs.io/en/latest/salmon.html):
 
-```{bash}
+
+```bash
 snakemake -s scr/salmon.smk \
    -j 100 \
    -p --use-conda \
@@ -112,7 +112,8 @@ Results:
 
 Performed with [DESeq2](https://bioconductor.org/packages/release/bioc/html/DESeq2.html):
 
-```{bash}
+
+```bash
 R -e 'rmarkdown::render("scr/DESeq.Rmd", output_dir="results/reports/")'
 ```
 
@@ -126,7 +127,8 @@ Results:
 
 Performed with [clusterprofiler](https://bioconductor.org/packages/release/bioc/vignettes/clusterProfiler/inst/doc/clusterProfiler.html):
 
-```{bash}
+
+```bash
 # GO analysis
 R -e 'rmarkdown::render("scr/GO_analysis.Rmd", output_dir="results/reports/")'
 # KEGG analysis
@@ -144,7 +146,8 @@ Results:
 
 **Note**：interesting_gene.txt is created in advance (case insensitive)
 
-```{bash}
+
+```bash
 python scr/select_gene.py -i results/tables/deseq/LingonProj_DESeqres.csv -g data/reference/interesting_gene.txt -o results/tables/deseq/LingonProj_interesting_gene.csv
 ```
 

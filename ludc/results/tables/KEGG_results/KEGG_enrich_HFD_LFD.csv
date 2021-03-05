@@ -1,0 +1,46 @@
+"ID","Description","GeneRatio","BgRatio","pvalue","p.adjust","qvalue","geneID","Count"
+"mmu04914","Progesterone-mediated oocyte maturation","18/339","90/8733",7.56517029736317e-09,2.20902972683005e-06,1.72008082550573e-06,"Cdk1/Adcy4/Adcy5/Hsp90ab1/Anapc2/Cdc25b/Bub1/Aurka/Ccna2/Pik3r3/Mad2l1/Kras/Kif22/Plk1/Ccnb2/Gnai2/Ccnb1/Mapk3",18
+"mmu04114","Oocyte meiosis","18/339","118/8733",5.79431589164382e-07,8.45970120179997e-05,6.58722227681613e-05,"Cdc20/Fbxo5/Cdk1/Adcy4/Adcy5/Sgo1/Anapc2/Bub1/Aurka/Ccne2/Mad2l1/Itpr2/Plk1/Ppp2r1b/Ccnb2/Ccnb1/Espl1/Mapk3",18
+"mmu04512","ECM-receptor interaction","14/339","88/8733",6.40180189977921e-06,0.000623108718245177,0.000485189196614846,"Itga5/Col6a1/Cd44/Col6a2/Hmmr/Thbs4/Itga7/Tnc/Hspg2/Col4a1/Col4a2/Itga1/Reln/Col6a3",14
+"mmu04110","Cell cycle","16/339","123/8733",2.01091216907643e-05,0.00146796588342579,0.00114304481189607,"Cdc20/Cdk1/Mcm4/Anapc2/Cdc25b/Bub1/E2f1/Ccna2/Ccne2/Cdkn2c/Mad2l1/Plk1/Wee1/Ccnb2/Ccnb1/Espl1",16
+"mmu04540","Gap junction","12/339","86/8733",0.00011072523751236,0.00646635387072183,0.00503508448477259,"Pdgfb/Cdk1/Adcy4/Adcy5/Tuba4a/Kras/Itpr2/Gnai2/Tuba1c/Mapk3/Tuba3a/Prkcg",12
+"mmu04974","Protein digestion and absorption","13/339","108/8733",0.000265283936612509,0.0129104849151421,0.0100528649663688,"Col6a1/Col18a1/Col6a2/Slc36a1/Slc38a2/Col5a1/Eln/Col4a1/Col4a2/Col12a1/Atp1a3/Col6a3/Col8a1",13
+"mmu04510","Focal adhesion","18/339","199/8733",0.000712350093816856,0.0297151753420746,0.0231379880096904,"Pdgfb/Itga5/Col6a1/Actn1/Col6a2/Thbs4/Flnb/Itga7/Tnc/Pik3r3/Vasp/Col4a1/Col4a2/Itga1/Reln/Col6a3/Mapk3/Prkcg",18
+"mmu05166","Human T-cell leukemia virus 1 infection","20/339","239/8733",0.000983664321803201,0.0308927133373777,0.0240548885395587,"Cdc20/Adcy4/Adcy5/Ets2/Nrp1/Anapc2/E2f1/Ccna2/Ccne2/Cdkn2c/Pik3r3/Mad2l1/Kras/Il2rg/Jak3/Ets1/Ccnb2/Espl1/Mapk3/H2-Q10",20
+"mmu01524","Platinum drug resistance","10/339","80/8733",0.000997551522647894,0.0308927133373777,0.0240548885395587,"Gstm5/Birc5/Top2a/Polh/Gsta3/Casp8/Pik3r3/Gsta4/Gstp1/Mapk3",10
+"mmu00500","Starch and sucrose metabolism","6/339","31/8733",0.0010579696348417,0.0308927133373777,0.0240548885395587,"Ugp2/Pygl/Gbe1/Gaa/Pgm2/Amy1",6
+"mmu04218","Cellular senescence","16/339","175/8733",0.0012420178669925,0.0329699288328918,0.0256723310306584,"Foxm1/Map2k3/Cdk1/E2f1/Ccna2/Ccne2/Pik3r3/Kras/Itpr2/Ets1/Ccnb2/Serpine1/Ccnb1/Hipk2/Mapk3/H2-Q10",16
+"mmu04066","HIF-1 signaling pathway","12/339","113/8733",0.00140139187062431,0.0341005355185249,0.0265526880749869,"Timp1/Pdk1/Plcg1/Pdhb/Pfkfb3/Pik3r3/Pdha1/Trf/Serpine1/Mapk3/Eno1/Prkcg",12
+"mmu04723","Retrograde endocannabinoid signaling","14/339","146/8733",0.00157162691958416,0.0353011585014288,0.0274875639376662,"Ndufa2/Ndufs7/Adcy4/Adcy5/Ndufa5/Ndufv2/Abhd6/Ndufb5/Itpr2/Gnai2/Ndufb10/Ndufa7/Mapk3/Prkcg",14
+"mmu05171","Coronavirus disease - COVID-19","19/339","236/8733",0.00205054831260703,0.042768579091518,0.033302138009257,"Rpl13/Rps25/Rps5/Plcg1/C3/Rplp2/Nrp1/Pik3r3/Ccl2/Rps21/Adam17/C1ra/Rpl36/Rpl30/Rpl3/Mapk3/Rps15/Prkcg/Rps13",19
+"mmu04152","AMPK signaling pathway","12/339","124/8733",0.00308786315315968,0.0570688841463007,0.044437198902671,"Slc2a4/Acaca/Cpt1a/Fasn/Pfkfb3/Ccna2/Pik3r3/Ppargc1a/Ppp2r1b/Acacb/Prkaa1/Lep",12
+"mmu05012","Parkinson disease","19/339","245/8733",0.00312706214500278,0.0570688841463007,0.044437198902671,"Txn2/Ubc/Ndufa2/Plcg1/Psmd11/Ndufs7/Psmc1/Adcy5/Ndufa5/Ndufv2/Tuba4a/Psma7/Ndufb5/Itpr2/Gnai2/Ndufb10/Ndufa7/Tuba1c/Tuba3a",19
+"mmu04392","Hippo signaling pathway - multiple species","5/339","27/8733",0.00341294095456189,0.058622279925416,0.0456467644696822,"Lats2/Wwtr1/Dchs1/Fat4/Tead1",5
+"mmu05010","Alzheimer disease","25/339","366/8733",0.0042041176322241,0.067027385012689,0.0521914749918559,"Ulk2/Psen2/Ndufa2/Aph1a/Psmd11/Ndufs7/Atp2a3/Psmc1/Fzd6/App/Ndufa5/Ndufv2/Casp8/Tuba4a/Psma7/Ndufb5/Pik3r3/Kras/Itpr2/Ndufb10/Ndufa7/Tuba1c/Adam17/Mapk3/Tuba3a",25
+"mmu05418","Fluid shear stress and atherosclerosis","13/339","146/8733",0.00436137094260647,0.067027385012689,0.0521914749918559,"Pdgfb/Gstm5/Txn2/Pecam1/Hsp90ab1/Gsta3/Pik3r3/Cdh5/Gsta4/Gpc1/Ccl2/Prkaa1/Gstp1",13
+"mmu05022","Pathways of neurodegeneration - multiple diseases","30/339","470/8733",0.00483431737822034,0.0699933539362696,0.0545009533173549,"Ulk2/Ubc/Psen2/Ndufa2/Plcg1/Psmd11/Gpx3/Map2k3/Ndufs7/Atp2a3/Psmc1/Fzd6/Derl1/App/Sod1/Ndufa5/Ndufv2/Casp8/Tuba4a/Psma7/Ndufb5/Kras/Itpr2/Hip1/Ndufb10/Ndufa7/Tuba1c/Mapk3/Tuba3a/Prkcg",30
+"mmu05230","Central carbon metabolism in cancer","8/339","69/8733",0.00503376860500569,0.0699933539362696,0.0545009533173549,"Pdk1/Pdhb/Pik3r3/Ret/Kras/Pdha1/Ntrk3/Mapk3",8
+"mmu05205","Proteoglycans in cancer","16/339","204/8733",0.00580046587550693,0.0705008601983235,0.0548961276237847,"Itga5/Cd44/Plcg1/Esr1/Dcn/Fzd6/Flnb/Cd63/Pik3r3/Hspg2/Kras/Itpr2/Iqgap1/Gpc1/Mapk3/Prkcg",16
+"mmu00480","Glutathione metabolism","8/339","71/8733",0.00599118799543149,0.0705008601983235,0.0548961276237847,"Gstm5/Gpx3/Rrm2/Gsta3/Gsr/Gsta4/Gstp1/Gpx4",8
+"mmu04151","PI3K-Akt signaling pathway","24/339","357/8733",0.0060756254339051,0.0705008601983235,0.0548961276237847,"Pdgfb/Itga5/Col6a1/Ddit4/Col6a2/Thbs4/Hsp90ab1/Itga7/Pkn3/Ccne2/Tnc/Pik3r3/Kras/Il2rg/Col4a1/Col4a2/Jak3/Ppp2r1b/Itga1/Reln/Col6a3/F2r/Prkaa1/Mapk3",24
+"mmu04371","Apelin signaling pathway","12/339","136/8733",0.00650472216548702,0.0705008601983235,0.0548961276237847,"Ccn2/Adcy4/Adcy5/Hdac4/Ppargc1a/Kras/Itpr2/Gnai2/Serpine1/Aplnr/Prkaa1/Mapk3",12
+"mmu00980","Metabolism of xenobiotics by cytochrome P450","8/339","72/8733",0.00651891515532443,0.0705008601983235,0.0548961276237847,"Gstm5/Dhdh/Hsd11b1/Gsta3/Gsta4/Ugt1a6a/Gstp1/Ugt1a6b",8
+"mmu05223","Non-small cell lung cancer","8/339","72/8733",0.00651891515532443,0.0705008601983235,0.0548961276237847,"Plcg1/E2f1/Pik3r3/Ret/Kras/Jak3/Mapk3/Prkcg",8
+"mmu04730","Long-term depression","7/339","60/8733",0.00822643253467299,0.0857899392901612,0.0668011062965927,"Kras/Itpr2/Ppp2r1b/Gnai2/Lyn/Mapk3/Prkcg",7
+"mmu00983","Drug metabolism - other enzymes","9/339","91/8733",0.00857547086245568,0.0863461204081744,0.0672341817165309,"Gstm5/Rrm2/Nme2/Tk1/Gsta3/Gsta4/Ugt1a6a/Gstp1/Ugt1a6b",9
+"mmu01522","Endocrine resistance","9/339","92/8733",0.00919104487833444,0.0865737130475373,0.0674113987680896,"Esr1/Adcy4/Adcy5/Dll4/E2f1/Cdkn2c/Pik3r3/Kras/Mapk3",9
+"mmu04666","Fc gamma R-mediated phagocytosis","9/339","92/8733",0.00919104487833444,0.0865737130475373,0.0674113987680896,"Plcg1/Myo10/Pik3r3/Wasf3/Vasp/Asap3/Lyn/Mapk3/Prkcg",9
+"mmu05165","Human papillomavirus infection","23/339","352/8733",0.00993813023901362,0.0905291573863021,0.0704913410073585,"Itga5/Col6a1/Col6a2/Psmc1/Thbs4/Fzd6/Itga7/Casp8/E2f1/Ccna2/Ccne2/Tnc/Pik3r3/Kras/Col4a1/Col4a2/Ppp2r1b/Atp6v1g1/Itga1/Reln/Col6a3/Mapk3/H2-Q10",23
+"mmu04360","Axon guidance","14/339","181/8733",0.0107229646267035,0.0905291573863021,0.0704913410073585,"Pdk1/Plcg1/Sema3g/Ablim1/Nrp1/Pik3r3/Ephb4/Kras/Gnai2/Ablim3/Plxnb2/Robo2/Fes/Mapk3",14
+"mmu05161","Hepatitis B","13/339","163/8733",0.0107673277110865,0.0905291573863021,0.0704913410073585,"Stat6/Birc5/Map2k3/Casp8/E2f1/Ccna2/Ccne2/Pik3r3/Hspg2/Kras/Jak3/Mapk3/Prkcg",13
+"mmu04972","Pancreatic secretion","10/339","111/8733",0.0108617482107887,0.0905291573863021,0.0704913410073585,"Rab11a/Atp2a3/Adcy4/Adcy5/Atp2b4/Pla2g12a/Itpr2/Atp1a3/Amy1/Prkcg",10
+"mmu04810","Regulation of actin cytoskeleton","16/339","219/8733",0.0111611289928318,0.0905291573863021,0.0704913410073585,"Pdgfb/Itga5/Actn1/Myh11/Spata13/Myh9/Itga7/Iqgap3/Pik3r3/Kras/Iqgap1/Arhgef6/Arhgef7/Itga1/F2r/Mapk3",16
+"mmu05203","Viral carcinogenesis","16/339","220/8733",0.0116246395448428,0.0917403985701108,0.0714344848274835,"Dnaja3/Cdc20/Actn1/Cdk1/Psmc1/C3/Casp8/Hdac4/Ccna2/Ccne2/Pik3r3/Kras/Jak3/Lyn/Mapk3/H2-Q10",16
+"mmu04068","FoxO signaling pathway","11/339","131/8733",0.0127884533411684,0.0952143220615047,0.074139486536716,"Slc2a4/Plk2/Pik3r3/Kras/Plk1/Ccnb2/Setd7/Ccnb1/S1pr1/Prkaa1/Mapk3",11
+"mmu05016","Huntington disease","20/339","300/8733",0.0128006843180337,0.0952143220615047,0.074139486536716,"Ulk2/Ndufa2/Psmd11/Gpx3/Ndufs7/Psmc1/Sod1/Ndufa5/Ndufv2/Casp8/Tuba4a/Psma7/Ndufb5/Ppargc1a/Polr2l/Hip1/Ndufb10/Ndufa7/Tuba1c/Tuba3a",20
+"mmu05415","Diabetic cardiomyopathy","15/339","204/8733",0.0130430578166445,0.0952143220615047,0.074139486536716,"Ndufa2/Slc2a4/Ndufs7/Atp2a3/Pdhb/Ndufa5/Mpc1/Ndufv2/Ndufb5/Pik3r3/Pdha1/Gsr/Ndufb10/Ndufa7/Prkcg",15
+"mmu05231","Choline metabolism in cancer","9/339","98/8733",0.0136117974098254,0.0953919497475414,0.0742777979288714,"Pdgfb/Plcg1/Slc5a7/Pik3r3/Wasf3/Kras/Slc22a2/Mapk3/Prkcg",9
+"mmu04935","Growth hormone synthesis, secretion and action","10/339","115/8733",0.0137207598951943,0.0953919497475414,0.0742777979288714,"Plcg1/Map2k3/Adcy4/Adcy5/Pik3r3/Kras/Itpr2/Gnai2/Mapk3/Prkcg",10
+"mmu03010","Ribosome","11/339","133/8733",0.0142080891164214,0.0960919243496436,0.0748228394359157,"Rpl13/Rps25/Rps5/Rplp2/Mrps15/Rps21/Rpl36/Rpl30/Rpl3/Rps15/Rps13",11
+"mmu05215","Prostate cancer","9/339","99/8733",0.0144796050389874,0.0960919243496436,0.0748228394359157,"Pdgfb/Hsp90ab1/E2f1/Ccne2/Pik3r3/Kras/Erg/Gstp1/Mapk3",9
+"mmu04960","Aldosterone-regulated sodium reabsorption","5/339","38/8733",0.0149931237404528,0.0972887140491601,0.0757547304780771,"Pik3r3/Kras/Atp1a3/Mapk3/Prkcg",5

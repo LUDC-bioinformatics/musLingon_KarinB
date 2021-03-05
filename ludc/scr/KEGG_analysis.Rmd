@@ -52,6 +52,7 @@ kegg_HFD_vs_LFD <- gseKEGG(geneList = kegg_HFD_vs_LFD_gene_list,
                pAdjustMethod = "none",
                keyType       = "ncbi-geneid")
 # write result
+kegg_HFD_vs_LFD <- setReadable(kegg_HFD_vs_LFD, OrgDb = org.Mm.eg.db, keyType="ENTREZID")
 file_name <- "results/tables/KEGG_results/KEGG_GSEA_HFD_LFD.csv"
 write.csv(as.data.frame(kegg_HFD_vs_LFD),file_name,row.names = F)
 ```
@@ -99,7 +100,7 @@ kegg_HFD_vs_Lingon <- gseKEGG(geneList = kegg_HFD_vs_Lingon_gene_list,
                pvalueCutoff = 0.05,
                pAdjustMethod = "none",
                keyType       = "ncbi-geneid")
-
+kegg_HFD_vs_Lingon <- setReadable(kegg_HFD_vs_Lingon, OrgDb = org.Mm.eg.db, keyType="ENTREZID")
 file_name <- "results/tables/KEGG_results/KEGG_GSEA_HFD_Lingon.csv"
 write.csv(as.data.frame(kegg_HFD_vs_Lingon),file_name,row.names = F)
 ```
@@ -138,7 +139,7 @@ kegg_LFD_vs_Lingon <- gseKEGG(geneList = kegg_LFD_vs_Lingon_gene_list,
                pvalueCutoff = 0.05,
                pAdjustMethod = "none",
                keyType       = "ncbi-geneid")
-
+kegg_LFD_vs_Lingon <- setReadable(kegg_LFD_vs_Lingon, OrgDb = org.Mm.eg.db, keyType="ENTREZID")
 file_name <- "results/tables/KEGG_results/KEGG_GSEA_LFD_Lingon.csv"
 write.csv(as.data.frame(kegg_LFD_vs_Lingon),file_name,row.names = F)
 ```
@@ -172,6 +173,7 @@ enrich_HFD_LFD <- enrichKEGG(gene         = sign_genes,
                  organism     = 'mmu',
                  universe = DEseq_res2$ENTREZID,
                  pvalueCutoff = 0.1)
+enrich_HFD_LFD <- setReadable(enrich_HFD_LFD, OrgDb = org.Mm.eg.db, keyType="ENTREZID")
 file_name <- "results/tables/KEGG_results/KEGG_enrich_HFD_LFD.csv"
 write.csv(as.data.frame(enrich_HFD_LFD),file_name,row.names = F)
 ```
@@ -212,6 +214,7 @@ enrich_LFD_Lingon <- enrichKEGG(gene         = sign_genes,
                  organism     = 'mmu',
                  universe = DEseq_res2$ENTREZID,
                  pvalueCutoff = 0.1)
+enrich_LFD_Lingon <- setReadable(enrich_LFD_Lingon, OrgDb = org.Mm.eg.db, keyType="ENTREZID")
 file_name <- "results/tables/KEGG_results/KEGG_enrich_LFD_Lingon.csv"
 write.csv(as.data.frame(enrich_LFD_Lingon),file_name,row.names = F)
 ```
