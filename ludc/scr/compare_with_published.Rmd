@@ -18,6 +18,7 @@ knitr::opts_knit$set(root.dir = '../')
 ## Load data
 ```{r}
 library(dplyr)
+library(VennDiagram)
 ```
 
 DESeq_res: the DESeq results from the musLingon project
@@ -32,7 +33,7 @@ anova_factors <- read.table("data/anova_factors.csv", header = TRUE)
 
 ## Create new matrix for comparison
 
-calculate the mean expression level
+calculate the mean expression level and fold change
 
 ```{r}
 DEseq_res_mean <- DEseq_res[,c('gene','HFD_tpm','LFD_tpm')]
@@ -45,45 +46,82 @@ linear_expression_mean<- data.frame(gene = linear_expression$ensembl_gene_id,
 
 ## select common DE genes
 common_expr_gene <- inner_join(DEseq_res_mean, linear_expression_mean, by = 'gene')
-head(common_expr_gene)
+knitr::kable(common_expr_gene[1:8,], "pipe")
 
 names(anova_factors) <- c('gene','Day.2','Day.4','Day.6','Day.14')
 DEseq_res_fold <- DEseq_res[,c('gene','log2FoldChange_HFD_vs_LFD')]
 common_fold <- inner_join(DEseq_res_fold, anova_factors, by = 'gene')
+knitr::kable(common_fold[1:8,], "pipe")
 ```
 
 ## Correlation
 
-### correlation between expression level
+
+### remove low expressed genes (the expression level of the gene is lower than 80% genes)
+
+```{r}
+DEseq_res_fil <- DEseq_res[order(DEseq_res$HFD_tpm, decreasing=TRUE), ][1:(54347*0.8), ]
+DEseq_res_fil <- DEseq_res_fil[,c('gene','HFD_tpm','LFD_tpm')]
+linear_expression_fil <- linear_expression_mean[order(linear_expression_mean$fat_D4_mean, decreasing=TRUE), ][1:(39179*0.45), ]
+common_expr_gene_fil <- inner_join(DEseq_res_fil, linear_expression_fil, by = 'gene')
+```
 
 plot the data
 
 ```{r}
-plot(common_expr_gene[, 4],log2(common_expr_gene[, 2]),xlab="fat_D0_mean", ylab="HFD_tpm")
-plot(common_expr_gene[, 5],log2(common_expr_gene[, 2]),xlab="fat_D2_mean", ylab="HFD_tpm")
-plot(common_expr_gene[, 6],log2(common_expr_gene[, 2]),xlab="fat_D4_mean", ylab="HFD_tpm")
-plot(common_expr_gene[, 7],log2(common_expr_gene[, 2]),xlab="fat_D6_mean", ylab="HFD_tpm")
-plot(common_expr_gene[, 8],log2(common_expr_gene[, 2]),xlab="fat_D14_mean", ylab="HFD_tpm")
+plot(common_expr_gene_fil[, 4],log2(common_expr_gene_fil[, 2]),xlab="fat_D0_mean", ylab="HFD_tpm")
+plot(common_expr_gene_fil[, 5],log2(common_expr_gene_fil[, 2]),xlab="fat_D2_mean", ylab="HFD_tpm")
+plot(common_expr_gene_fil[, 6],log2(common_expr_gene_fil[, 2]),xlab="fat_D4_mean", ylab="HFD_tpm")
+plot(common_expr_gene_fil[, 7],log2(common_expr_gene_fil[, 2]),xlab="fat_D6_mean", ylab="HFD_tpm")
+plot(common_expr_gene_fil[, 8],log2(common_expr_gene_fil[, 2]),xlab="fat_D14_mean", ylab="HFD_tpm")
 
-plot(common_expr_gene[, 4],log2(common_expr_gene[, 2]),xlab="fat_D0_mean", ylab="LFD_tpm")
-plot(common_expr_gene[, 5],log2(common_expr_gene[, 2]),xlab="fat_D2_mean", ylab="LFD_tpm")
-plot(common_expr_gene[, 6],log2(common_expr_gene[, 2]),xlab="fat_D4_mean", ylab="LFD_tpm")
-plot(common_expr_gene[, 7],log2(common_expr_gene[, 2]),xlab="fat_D6_mean", ylab="LFD_tpm")
-plot(common_expr_gene[, 8],log2(common_expr_gene[, 2]),xlab="fat_D14_mean", ylab="LFD_tpm")
+plot(common_expr_gene_fil[, 4],log2(common_expr_gene_fil[, 2]),xlab="fat_D0_mean", ylab="LFD_tpm")
+plot(common_expr_gene_fil[, 5],log2(common_expr_gene_fil[, 2]),xlab="fat_D2_mean", ylab="LFD_tpm")
+plot(common_expr_gene_fil[, 6],log2(common_expr_gene_fil[, 2]),xlab="fat_D4_mean", ylab="LFD_tpm")
+plot(common_expr_gene_fil[, 7],log2(common_expr_gene_fil[, 2]),xlab="fat_D6_mean", ylab="LFD_tpm")
+plot(common_expr_gene_fil[, 8],log2(common_expr_gene_fil[, 2]),xlab="fat_D14_mean", ylab="LFD_tpm")
+
+```
+
+correlation between expression level
+
+```{r}
+cor_expr_fil<- matrix(0,7,7, dimnames = list(colnames(common_expr_gene_fil)[2:8], colnames(common_expr_gene_fil)[2:8]))
+
+for(i in 2:8){
+   for(j in 2:8){
+     t <- cor.test(common_expr_gene_fil[, i], common_expr_gene_fil[, j], method ="spearman", exact = FALSE)
+     cor_expr_fil[i-1, j-1] <- t$estimate
+   }
+}
+knitr::kable(cor_expr_fil, "pipe")
 
 ```
 
 
+### take the top 2000 expressed genes
+
+
 ```{r}
-cor_expr<- matrix(0,7,7, dimnames = list(colnames(common_expr_gene)[2:8], colnames(common_expr_gene)[2:8]))
+DEseq_res_top2000 <- DEseq_res[order(DEseq_res$HFD_tpm, decreasing=TRUE), ][1:2000, ]
+DEseq_res_top2000  <- DEseq_res_top2000[,c('gene','HFD_tpm','LFD_tpm')]
+linear_expression_top2000 <- linear_expression_mean[order(linear_expression_mean$fat_D4_mean, decreasing=TRUE), ][1:2000, ]
+common_expr_gene_top <- inner_join(DEseq_res_top2000, linear_expression_top2000, by = 'gene')
+
+```
+
+correlation between expression level
+
+```{r}
+cor_expr_top<- matrix(0,7,7, dimnames = list(colnames(common_expr_gene_top)[2:8], colnames(common_expr_gene_top)[2:8]))
 
 for(i in 2:8){
    for(j in 2:8){
-     t <- cor.test(common_expr_gene[, i], common_expr_gene[, j], method ="spearman", exact = FALSE)
-     cor_expr[i-1, j-1] <- t$estimate
+     t <- cor.test(common_expr_gene_top[, i], common_expr_gene_top[, j], method ="spearman", exact = FALSE)
+     cor_expr_top[i-1, j-1] <- t$estimate
    }
 }
-print(cor_expr)
+knitr::kable(cor_expr_top, "pipe")
 ```
 
 ### correlation between fold change
@@ -97,7 +135,7 @@ plot(common_fold[, 5],common_fold[, 2],xlab="D6.factor", ylab="log2FoldChange_HF
 plot(common_fold[, 6],common_fold[, 2],xlab="D14.factor", ylab="log2FoldChange_HFD_vs_LFD")
 
 ```
-
+correlation between fold change
 
 ```{r}
 cor_fold<- matrix(0,5,5, dimnames = list(colnames(common_fold)[2:6], colnames(common_fold)[2:6]))
@@ -108,7 +146,7 @@ for(i in 2:6){
      cor_fold[i-1, j-1] <- t$estimate
    }
 }
-print(cor_fold)
+knitr::kable(cor_fold, "pipe")
 ```
 
 
@@ -116,10 +154,10 @@ print(cor_fold)
 ## take the overlapped significant DE genes in both project
 
 ```{r}
-DEseq_res_sign <- DEseq_res[DEseq_res$padj_HFD_vs_LFD < 0.05,]
-anova_res_sign <- linear_expression[linear_expression$P.Val < 0.05,]
+DEseq_res_sign <- filter(DEseq_res, padj_HFD_vs_LFD < 0.1)
+anova_res_sign <- filter(linear_expression,P.Value < 0.1)
 
-DEseq_res_sign <- DEseq_res[,c('gene','HFD_tpm','LFD_tpm')]
+DEseq_res_sign <- DEseq_res_sign[,c('gene','HFD_tpm','LFD_tpm')]
 anova_res_sign<- data.frame(gene = anova_res_sign$ensembl_gene_id, 
                                     fat_D0_mean = rowMeans(anova_res_sign[, c(11:14)]),
                                     fat_D2_mean = rowMeans(anova_res_sign[, c(15:18)]),
@@ -131,7 +169,37 @@ common_sign <- inner_join(DEseq_res_sign, anova_res_sign, by = 'gene')
 
 ```
 
-### correlation between expression level
+### Venn plot shows the number of the DE genes in both project
+
+
+number of the overlap DE genes in both project:
+```{r}
+nrow(common_sign)
+```
+number of the different DE genes in insulin signaling project:
+```{r}
+nrow(anova_res_sign) - nrow(common_sign)
+```
+number of the different DE genes in musLingon project:
+```{r}
+nrow(DEseq_res_sign) - nrow(common_sign)
+```
+```{r}
+venn.plot <- venn.diagram(list(musLingon=1:735, insulin_signaling=447:5292),
+                          NULL,
+                          col = "transparent",
+	                       fill = c("red", "blue"),
+	                       alpha = 0.5,
+                          cex = 2,
+                          label.col = c("black", "white", "black"),
+                          cat.cex = 1.5,
+	                       cat.pos = 0,
+	                       cat.dist = 0.03)
+grid::grid.draw(venn.plot)
+```
+
+
+correlation between expression level
 
 ```{r}
 cor_expr_sign<- matrix(0,7,7, dimnames = list(colnames(common_sign)[2:8], colnames(common_sign)[2:8]))
@@ -142,53 +210,5 @@ for(i in 2:8){
      cor_expr_sign[i-1, j-1] <- t$estimate
    }
 }
-print(cor_expr_sign)
-```
-
-## remove low expressed genes (the expression level of the gene is lower than 80% genes)
-
-```{r}
-DEseq_res_fil <- DEseq_res[order(DEseq_res$HFD_tpm, decreasing=TRUE), ][1:(54347*0.8), ]
-DEseq_res_fil <- DEseq_res_fil[,c('gene','HFD_tpm','LFD_tpm')]
-linear_expression_fil <- linear_expression_mean[order(linear_expression_mean$fat_D4_mean, decreasing=TRUE), ][1:(39179*0.8), ]
-common_expr_gene_fil <- inner_join(DEseq_res_fil, linear_expression_fil, by = 'gene')
-
-```
-
-### correlation between expression level
-
-```{r}
-cor_expr_fil<- matrix(0,7,7, dimnames = list(colnames(common_expr_gene_fil)[2:8], colnames(common_expr_gene_fil)[2:8]))
-
-for(i in 2:8){
-   for(j in 2:8){
-     t <- cor.test(common_expr_gene_fil[, i], common_expr_gene_fil[, j], method ="spearman", exact = FALSE)
-     cor_expr_fil[i-1, j-1] <- t$estimate
-   }
-}
-print(cor_expr_fil)
-```
-
-## take the top 2000 expressed genes
-
-```{r}
-DEseq_res_top2000 <- DEseq_res[order(DEseq_res$HFD_tpm, decreasing=TRUE), ][1:2000, ]
-DEseq_res_top2000  <- DEseq_res_top2000[,c('gene','HFD_tpm','LFD_tpm')]
-linear_expression_top2000 <- linear_expression_mean[order(linear_expression_mean$fat_D4_mean, decreasing=TRUE), ][1:2000, ]
-common_expr_gene_top <- inner_join(DEseq_res_top2000, linear_expression_top2000, by = 'gene')
-
-```
-
-### correlation between expression level
-
-```{r}
-cor_expr_top<- matrix(0,7,7, dimnames = list(colnames(common_expr_gene_top)[2:8], colnames(common_expr_gene_top)[2:8]))
-
-for(i in 2:8){
-   for(j in 2:8){
-     t <- cor.test(common_expr_gene_top[, i], common_expr_gene_top[, j], method ="spearman", exact = FALSE)
-     cor_expr_top[i-1, j-1] <- t$estimate
-   }
-}
-print(cor_expr_top)
+knitr::kable(head(cor_expr_sign, "pipe"))
 ```
