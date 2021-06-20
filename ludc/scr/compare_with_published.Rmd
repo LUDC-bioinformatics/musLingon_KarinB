@@ -1,13 +1,13 @@
 ---
-title: "LingonProj Gene Comparison"
+title: "Mouse Lingon diet experiment: compare with the published results"
 author:
-   name: "Shuyi Li"
-   email: shuyi.li@med.lu.se
+   name: "Shuyi Li & Dmytro Kryvokhyzha"
+   email: dmytro.kryvokhyzha@med.lu.se
    affiliation: LUDC Bioinformatics Unit
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 output:
-  html_document:
-    keep_md: true
+    html_document:
+      toc: true
 ---
 
 ```{r setup, include=FALSE}
@@ -15,7 +15,8 @@ knitr::opts_chunk$set(warning=FALSE, eval=TRUE, message=FALSE)
 knitr::opts_knit$set(root.dir = '../')
 ```
 
-## Load data
+## Data
+
 ```{r}
 library(dplyr)
 library(VennDiagram)
@@ -23,192 +24,278 @@ library(VennDiagram)
 
 DESeq_res: the DESeq results from the musLingon project
 
-linear_expression: the ANOVA results from the insulin signaling project
+linear_res: the ANOVA results from the insulin signaling project
 
 ```{r}
-DEseq_res <- read.table("data/LingonProj_DESeqres.csv", header = TRUE)
-linear_expression <- read.csv("data/table_linear_expression_pvals.20140702.csv",header = TRUE)
-anova_factors <- read.table("data/anova_factors.csv", header = TRUE)
+DEseq_res <- read.table("results/tables/deseq/LingonProj_DESeqres.csv", header = TRUE)
+linear_res <- read.csv("data/paper/table_linear_expression_pvals.20140702.csv",header = TRUE)
+anova_res <- read.table("data/paper/FAT_table_anova_Fstat_expression_pvals.20140707.csv",
+                        header = TRUE, sep = "\t", quote = "\"",)
 ```
 
-## Create new matrix for comparison
+## Correlation in all genes
 
-calculate the mean expression level and fold change
+### Mean expression levels
+
+Calculate the means
 
 ```{r}
 DEseq_res_mean <- DEseq_res[,c('gene','HFD_tpm','LFD_tpm')]
-linear_expression_mean<- data.frame(gene = linear_expression$ensembl_gene_id, 
-                                    fat_D0_mean = rowMeans(linear_expression[, c(11:14)]),
-                                    fat_D2_mean = rowMeans(linear_expression[, c(15:18)]),
-                                    fat_D4_mean = rowMeans(linear_expression[, c(19:22)]),
-                                    fat_D6_mean = rowMeans(linear_expression[, c(23:26)]),
-                                    fat_D14_mean = rowMeans(linear_expression[, c(27:30)]))
+linear_res_mean <- data.frame(gene = linear_res$ensembl_gene_id, 
+                              fat_D0_mean = rowMeans(linear_res[,
+                                 grep("D0", colnames(linear_res))]),
+                              fat_D2_mean = rowMeans(linear_res[,
+                                 grep("D2", colnames(linear_res))]),
+                              fat_D4_mean = rowMeans(linear_res[,
+                                 grep("D4", colnames(linear_res))]),
+                              fat_D6_mean = rowMeans(linear_res[,
+                                 grep("D6", colnames(linear_res))]),
+                              fat_D14_mean = rowMeans(linear_res[,
+                                 grep("D14", colnames(linear_res))]))
 
 ## select common DE genes
-common_expr_gene <- inner_join(DEseq_res_mean, linear_expression_mean, by = 'gene')
-knitr::kable(common_expr_gene[1:8,], "pipe")
+common_expr_gene <- inner_join(DEseq_res_mean, linear_res_mean, by = 'gene')
+```
 
-names(anova_factors) <- c('gene','Day.2','Day.4','Day.6','Day.14')
+Correlation
+
+```{r}
+knitr::kable(cor(as.matrix(common_expr_gene[,-1]), method ="spearman"))
+```
+
+### Fold change
+
+Get fold changes
+
+```{r}
+anova_factor <- anova_res[,c(1, grep("factor", colnames(anova_res)))]
+colnames(anova_factor)[1] <- 'gene'
 DEseq_res_fold <- DEseq_res[,c('gene','log2FoldChange_HFD_vs_LFD')]
-common_fold <- inner_join(DEseq_res_fold, anova_factors, by = 'gene')
-knitr::kable(common_fold[1:8,], "pipe")
+DESeq_anova_fold <- inner_join(DEseq_res_fold, anova_factor, by = 'gene')
+
+linear_beta <- linear_res[,c(1, grep("Beta", colnames(linear_res)))]
+colnames(linear_beta)[1] <- 'gene'
+DESeq_linear_fold <- inner_join(DEseq_res_fold, linear_beta, by = 'gene')
 ```
 
-## Correlation
-
-
-### remove low expressed genes (the expression level of the gene is lower than 80% genes)
+#### Linear regression
 
 ```{r}
-DEseq_res_fil <- DEseq_res[order(DEseq_res$HFD_tpm, decreasing=TRUE), ][1:(54347*0.8), ]
-DEseq_res_fil <- DEseq_res_fil[,c('gene','HFD_tpm','LFD_tpm')]
-linear_expression_fil <- linear_expression_mean[order(linear_expression_mean$fat_D4_mean, decreasing=TRUE), ][1:(39179*0.45), ]
-common_expr_gene_fil <- inner_join(DEseq_res_fil, linear_expression_fil, by = 'gene')
+knitr::kable(cor(na.omit(as.matrix(DESeq_linear_fold[,-1])), method ="spearman"))
 ```
 
-plot the data
+#### ANOVA
 
 ```{r}
-plot(common_expr_gene_fil[, 4],log2(common_expr_gene_fil[, 2]),xlab="fat_D0_mean", ylab="HFD_tpm")
-plot(common_expr_gene_fil[, 5],log2(common_expr_gene_fil[, 2]),xlab="fat_D2_mean", ylab="HFD_tpm")
-plot(common_expr_gene_fil[, 6],log2(common_expr_gene_fil[, 2]),xlab="fat_D4_mean", ylab="HFD_tpm")
-plot(common_expr_gene_fil[, 7],log2(common_expr_gene_fil[, 2]),xlab="fat_D6_mean", ylab="HFD_tpm")
-plot(common_expr_gene_fil[, 8],log2(common_expr_gene_fil[, 2]),xlab="fat_D14_mean", ylab="HFD_tpm")
-
-plot(common_expr_gene_fil[, 4],log2(common_expr_gene_fil[, 2]),xlab="fat_D0_mean", ylab="LFD_tpm")
-plot(common_expr_gene_fil[, 5],log2(common_expr_gene_fil[, 2]),xlab="fat_D2_mean", ylab="LFD_tpm")
-plot(common_expr_gene_fil[, 6],log2(common_expr_gene_fil[, 2]),xlab="fat_D4_mean", ylab="LFD_tpm")
-plot(common_expr_gene_fil[, 7],log2(common_expr_gene_fil[, 2]),xlab="fat_D6_mean", ylab="LFD_tpm")
-plot(common_expr_gene_fil[, 8],log2(common_expr_gene_fil[, 2]),xlab="fat_D14_mean", ylab="LFD_tpm")
-
+knitr::kable(cor(na.omit(as.matrix(DESeq_anova_fold[,-1])), method ="spearman"))
 ```
 
-correlation between expression level
+## Correlation in significant
+
+Get the DE genes in all results
 
 ```{r}
-cor_expr_fil<- matrix(0,7,7, dimnames = list(colnames(common_expr_gene_fil)[2:8], colnames(common_expr_gene_fil)[2:8]))
+DEseq_sign <- DEseq_res$gene[which(DEseq_res$padj_HFD_vs_LFD <= 0.01)]
+linear_sign <- linear_res$ensembl_gene_id[which(linear_res$adj.P.Val <= 0.1)]
+anova_sign <- anova_res$ensembl_gene_id[which(anova_res$adj.P.Val <= 0.01)]
+length(DEseq_sign)
+length(linear_sign)
+length(anova_sign)
 
-for(i in 2:8){
-   for(j in 2:8){
-     t <- cor.test(common_expr_gene_fil[, i], common_expr_gene_fil[, j], method ="spearman", exact = FALSE)
-     cor_expr_fil[i-1, j-1] <- t$estimate
-   }
-}
-knitr::kable(cor_expr_fil, "pipe")
-
+DEseq_linear_sign <- union(DEseq_sign, linear_sign)
+DEseq_anova_sign <- union(DEseq_sign, anova_sign)
+length(DEseq_linear_sign)
+length(DEseq_anova_sign)
 ```
 
+### Mean expression levels
 
-### take the top 2000 expressed genes
-
+Get the means
 
 ```{r}
-DEseq_res_top2000 <- DEseq_res[order(DEseq_res$HFD_tpm, decreasing=TRUE), ][1:2000, ]
-DEseq_res_top2000  <- DEseq_res_top2000[,c('gene','HFD_tpm','LFD_tpm')]
-linear_expression_top2000 <- linear_expression_mean[order(linear_expression_mean$fat_D4_mean, decreasing=TRUE), ][1:2000, ]
-common_expr_gene_top <- inner_join(DEseq_res_top2000, linear_expression_top2000, by = 'gene')
-
+DEseq_linear_sign_means <- common_expr_gene[which(common_expr_gene$gene %in% DEseq_linear_sign),]
+DEseq_anova_sign_means <- common_expr_gene[which(common_expr_gene$gene %in% DEseq_anova_sign),]
 ```
 
-correlation between expression level
+#### Linear regression
 
 ```{r}
-cor_expr_top<- matrix(0,7,7, dimnames = list(colnames(common_expr_gene_top)[2:8], colnames(common_expr_gene_top)[2:8]))
-
-for(i in 2:8){
-   for(j in 2:8){
-     t <- cor.test(common_expr_gene_top[, i], common_expr_gene_top[, j], method ="spearman", exact = FALSE)
-     cor_expr_top[i-1, j-1] <- t$estimate
-   }
-}
-knitr::kable(cor_expr_top, "pipe")
+knitr::kable(cor(as.matrix(DEseq_linear_sign_means[,-1]), method ="spearman"))
 ```
 
-### correlation between fold change
-
-plot the data
+#### ANOVA
 
 ```{r}
-plot(common_fold[, 3],common_fold[, 2],xlab="D2.factor", ylab="log2FoldChange_HFD_vs_LFD")
-plot(common_fold[, 4],common_fold[, 2],xlab="D4.factor", ylab="log2FoldChange_HFD_vs_LFD")
-plot(common_fold[, 5],common_fold[, 2],xlab="D6.factor", ylab="log2FoldChange_HFD_vs_LFD")
-plot(common_fold[, 6],common_fold[, 2],xlab="D14.factor", ylab="log2FoldChange_HFD_vs_LFD")
-
-```
-correlation between fold change
-
-```{r}
-cor_fold<- matrix(0,5,5, dimnames = list(colnames(common_fold)[2:6], colnames(common_fold)[2:6]))
-
-for(i in 2:6){
-   for(j in 2:6){
-     t <- cor.test(common_fold[, i], common_fold[, j], method ="spearman", exact = FALSE)
-     cor_fold[i-1, j-1] <- t$estimate
-   }
-}
-knitr::kable(cor_fold, "pipe")
+knitr::kable(cor(as.matrix(DEseq_anova_sign_means[,-1]), method ="spearman"))
 ```
 
+### Fold change
 
-
-## take the overlapped significant DE genes in both project
+Get fold changes
 
 ```{r}
-DEseq_res_sign <- filter(DEseq_res, padj_HFD_vs_LFD < 0.1)
-anova_res_sign <- filter(linear_expression,P.Value < 0.1)
-
-DEseq_res_sign <- DEseq_res_sign[,c('gene','HFD_tpm','LFD_tpm')]
-anova_res_sign<- data.frame(gene = anova_res_sign$ensembl_gene_id, 
-                                    fat_D0_mean = rowMeans(anova_res_sign[, c(11:14)]),
-                                    fat_D2_mean = rowMeans(anova_res_sign[, c(15:18)]),
-                                    fat_D4_mean = rowMeans(anova_res_sign[, c(19:22)]),
-                                    fat_D6_mean = rowMeans(anova_res_sign[, c(23:26)]),
-                                    fat_D14_mean = rowMeans(anova_res_sign[, c(27:30)]))
-
-common_sign <- inner_join(DEseq_res_sign, anova_res_sign, by = 'gene')
-
+DESeq_linear_fold_sign <- DESeq_anova_fold[which(DESeq_linear_fold$gene %in% DEseq_linear_sign),]
+DESeq_anova_fold_sign <- DESeq_anova_fold[which(DESeq_anova_fold$gene %in% DEseq_anova_sign),]
 ```
 
-### Venn plot shows the number of the DE genes in both project
+#### Linear regression
 
-
-number of the overlap DE genes in both project:
 ```{r}
-nrow(common_sign)
-```
-number of the different DE genes in insulin signaling project:
-```{r}
-nrow(anova_res_sign) - nrow(common_sign)
-```
-number of the different DE genes in musLingon project:
-```{r}
-nrow(DEseq_res_sign) - nrow(common_sign)
-```
-```{r}
-venn.plot <- venn.diagram(list(musLingon=1:735, insulin_signaling=447:5292),
-                          NULL,
-                          col = "transparent",
-	                       fill = c("red", "blue"),
-	                       alpha = 0.5,
-                          cex = 2,
-                          label.col = c("black", "white", "black"),
-                          cat.cex = 1.5,
-	                       cat.pos = 0,
-	                       cat.dist = 0.03)
-grid::grid.draw(venn.plot)
+knitr::kable(cor(na.omit(as.matrix(DESeq_linear_fold_sign[,-1])), method ="spearman"))
 ```
 
-
-correlation between expression level
+#### ANOVA
 
 ```{r}
-cor_expr_sign<- matrix(0,7,7, dimnames = list(colnames(common_sign)[2:8], colnames(common_sign)[2:8]))
+knitr::kable(cor(na.omit(as.matrix(DESeq_anova_fold_sign[,-1])), method ="spearman"))
+```
 
-for(i in 2:8){
-   for(j in 2:8){
-     t <- cor.test(common_sign[, i], common_sign[, j], method ="spearman", exact = FALSE)
-     cor_expr_sign[i-1, j-1] <- t$estimate
-   }
-}
-knitr::kable(head(cor_expr_sign, "pipe"))
+## Correlation without lowly expressed genes
+
+Remove the genes with the expression lower than 80% genes
+
+```{r}
+DEseq_res_fil <- DEseq_res$gene[order(DEseq_res$HFD_tpm, decreasing=TRUE)
+                                ][1:(length(DEseq_res$HFD_tpm)*0.8)]
+linear_res_fil <- linear_res_mean$gene[order(linear_res_mean$fat_D4_mean, decreasing=TRUE)
+                                       ][1:(length(linear_res_mean$fat_D4_mean)*0.8)]
+common_expr_gene_fil <- intersect(DEseq_res_fil, linear_res_fil)
+```
+
+### Mean expression levels
+
+Get the means
+
+```{r}
+common_expr_mean_fil <- common_expr_gene[which(common_expr_gene$gene %in% common_expr_gene_fil),]
+```
+
+#### Linear regression
+
+```{r}
+knitr::kable(cor(as.matrix(common_expr_mean_fil[,-1]), method ="spearman"))
+```
+
+### Fold change
+
+Get fold changes
+
+```{r}
+DESeq_linear_fold_fil <- DESeq_linear_fold[which(DESeq_linear_fold$gene %in%
+                                                    common_expr_gene_fil),]
+DESeq_anova_fold_fil <- DESeq_anova_fold[which(DESeq_anova_fold$gene %in%
+                                                  common_expr_gene_fil),]
+```
+
+#### Linear regression
+
+```{r}
+knitr::kable(cor(na.omit(as.matrix(DESeq_linear_fold_fil[,-1])), method ="spearman"))
+```
+
+#### ANOVA
+
+```{r}
+knitr::kable(cor(na.omit(as.matrix(DESeq_anova_fold_fil[,-1])), method ="spearman"))
+```
+
+## Correlation in top 2000 most expressed genes
+
+Get the top 2000 genes in all results
+
+```{r}
+
+DEseq_2000 <- DEseq_res$gene[order(DEseq_res$HFD_tpm, decreasing=TRUE)][c(1:2000)]
+linear_2000 <- linear_res_mean$gene[order(linear_res_mean$fat_D4_mean, decreasing=TRUE)][c(1:2000)]
+common_expr_gene_2000 <- intersect(DEseq_2000, linear_2000)
+```
+
+### Mean expression levels
+
+Get the means
+
+```{r}
+common_expr_mean_2000 <- common_expr_gene[which(common_expr_gene$gene %in% common_expr_gene_2000),]
+```
+
+#### Linear regression
+
+```{r}
+knitr::kable(cor(as.matrix(common_expr_mean_2000[,-1]), method ="spearman"))
+```
+
+### Fold change
+
+Get fold changes
+
+```{r}
+DESeq_linear_fold_2000 <- DESeq_linear_fold[which(DESeq_linear_fold$gene %in%
+                                                    common_expr_gene_2000),]
+DESeq_anova_fold_2000 <- DESeq_anova_fold[which(DESeq_anova_fold$gene %in%
+                                                  common_expr_gene_2000),]
+```
+
+#### Linear regression
+
+```{r}
+knitr::kable(cor(na.omit(as.matrix(DESeq_linear_fold_2000[,-1])), method ="spearman"))
+```
+
+#### ANOVA
+
+```{r}
+knitr::kable(cor(na.omit(as.matrix(DESeq_anova_fold_2000[,-1])), method ="spearman"))
+```
+
+### Overlap in the DE genes in both project
+
+Select significant genes
+
+```{r}
+DEseq_sign_venn <- DEseq_res$gene[which(DEseq_res$padj_HFD_vs_LFD <= 0.05)]
+linear_sign_venn <- linear_res$ensembl_gene_id[which(linear_res$adj.P.Val <= 0.1)]
+anova_sign_venn <- anova_res$ensembl_gene_id[which(anova_res$adj.P.Val <= 0.05)]
+```
+
+All three comparisons
+
+```{r}
+comparisons_genes <- list(DEseq_sign_venn,
+                         linear_sign_venn,
+                         anova_sign_venn)
+
+comparisons_names <- c('DESeq (current)',
+                       'Linear regression (14 days paper)',
+                       'ANOVA (14 days paper)')
+
+vennPlot <- venn.diagram(comparisons_genes,
+                        NULL,
+                        fill = c("red", "blue", "green"),
+                        category.names = comparisons_names,
+                        cex=1.5,
+                        main.cex = 1.5,
+                        sub.cex = 1.5)
+grid.draw(vennPlot)
+```
+
+DESeq vs ANOVA comparisons
+
+```{r}
+comparisons_genes2 <- list(DEseq_sign_venn, anova_sign_venn)
+
+comparisons_names2 <- c('DESeq',
+                       'ANOVA')
+
+vennPlot2 <- venn.diagram(comparisons_genes2,
+                        NULL,
+                        fill = c("red", "blue"),
+                        category.names = comparisons_names2,
+                        cex=1.5,
+                        main.cex = 1.5,
+                        sub.cex = 1.5)
+grid.draw(vennPlot2)
+```
+
+```{bash clean_logs, include=FALSE}
+rm VennDiagram*.log
 ```

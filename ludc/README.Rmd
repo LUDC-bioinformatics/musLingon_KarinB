@@ -12,9 +12,8 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, eval = FALSE)
+knitr::opts_chunk$set(warning=FALSE, eval=FALSE, message=FALSE)
 ```
-
 
 ## Project
 
@@ -151,3 +150,18 @@ python scr/select_gene.py -i results/tables/deseq/LingonProj_DESeqres.csv -g dat
 Results:
 
 * `results/tables/deseq/LingonProj_interesting_gene.csv` - DESeq results with only interesting gene (listed above in the analysis step) selected.
+
+### Compare with the published results
+
+We compare our results with the paper [Intact glucose uptake despite deteriorating signaling in adipocytes with high-fat feeding](https://jme.bioscientifica.com/view/journals/jme/60/3/JME-17-0195.xml).
+
+We expect the highest correlation of our results with 4 days results in this paper. 
+
+```{bash}
+R -e 'rmarkdown::render("scr/compare_with_published.Rmd", output_dir="results/reports/")'
+```
+
+We see the similarity in foldchange and day 4 factor in ANOVA, but mean expression 
+is also similar to day 2 and sometimes to day 6 depending at what genes we look.
+This may be because the food is a little different - 
+the high fat diet with Lingon contained 45% fat, compared with my previous short-term HFD study where the diet contained 58% fat.
