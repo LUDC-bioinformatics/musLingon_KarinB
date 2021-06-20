@@ -1,6 +1,6 @@
-# conda list -e | grep -E "bioconductor-deseq2|bioconductor-ihw|bioconductor-mygene|bioconductor-tximport|fastqc|multiqc|salmon|r-ggplot2|r-knitr|r-rcolorbrewer|r-rmarkdown|r-yaml|snakemake-minimal"
+# conda list -e | grep -E "bioconductor-deseq2|bioconductor-ihw|bioconductor-mygene|bioconductor-tximport|fastqc|multiqc|salmon|r-ggplot2|r-knitr|r-rcolorbrewer|r-rmarkdown|r-yaml|snakemake-minimal|bioconductor-org.hs.eg.db|bioconductor-clusterprofiler|r-sm|r-reshape2|r-gprofiler2|goatools|r-dplyr|r-venndiagram"
 # conda env update --file conf/conda.yml  --prune
-# conda env remove --name hmec
+# conda env remove --name LingonProj
 # conda env create -f conf/conda.yml
 
 name: LingonProj
@@ -11,20 +11,20 @@ channels:
 
 dependencies:
   - argparse
-  - bioconductor-deseq2
-  - bioconductor-ihw
-  - bioconductor-mygene
-  - bioconductor-tximport
-  - bioconductor-org.hs.eg.db
-  - bioconductor-clusterprofiler
+  - bioconductor-deseq2=1.30.0
+  - bioconductor-ihw=1.18.0
+  - bioconductor-mygene=1.26.0
+  - bioconductor-tximport=1.18.0
+  - bioconductor-org.hs.eg.db=3.12.0
+  - bioconductor-clusterprofiler=3.18.0
   - r-ggplot2
-  - r-knitr
   - r-rcolorbrewer
+  - r-knitr
   - r-rmarkdown
-  - r-yaml
-  - salmon
+  - salmon=1.4.0
   - snakemake-minimal=5.19.2
   - r-sm
   - r-reshape2
-  - r-gprofiler2
   - goatools=1.0.6
+  - r-dplyr
+  - r-venndiagram
