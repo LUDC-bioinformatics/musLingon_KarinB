@@ -1,30 +1,27 @@
-# conda list -e | grep -E "bioconductor-deseq2|bioconductor-ihw|bioconductor-mygene|bioconductor-tximport|fastqc|multiqc|salmon|r-ggplot2|r-knitr|r-rcolorbrewer|r-rmarkdown|r-yaml|snakemake-minimal|bioconductor-org.hs.eg.db|bioconductor-clusterprofiler|r-sm|r-reshape2|r-gprofiler2|goatools|r-dplyr|r-venndiagram"
+# conda list -e | grep -E "bioconductor-deseq2|bioconductor-ihw|bioconductor-mygene|bioconductor-tximport|r-ggplot2|r-rcolorbrewer|r-knitr|r-rmarkdown|salmon|snakemake-minimal|r-sm|r-reshape2|r-dplyr|r-venndiagram|r-webgestaltr"
 # conda env update --file conf/conda.yml  --prune
-# conda env remove --name LingonProj
+# conda env remove --name musLingon
 # conda env create -f conf/conda.yml
 
-name: LingonProj
+name: musLingon
 
 channels:
   - bioconda
   - conda-forge
 
 dependencies:
-  - argparse
-  - bioconductor-deseq2=1.30.0
-  - bioconductor-ihw=1.18.0
-  - bioconductor-mygene=1.26.0
-  - bioconductor-tximport=1.18.0
-  - bioconductor-org.hs.eg.db=3.12.0
-  - bioconductor-clusterprofiler=3.18.0
-  - r-ggplot2
-  - r-rcolorbrewer
-  - r-knitr
-  - r-rmarkdown
+  - bioconductor-deseq2=1.26.0
+  - bioconductor-ihw=1.14.0
+  - bioconductor-mygene=1.22.0
+  - bioconductor-tximport=1.14.0
+  - r-dplyr=1.0.1
+  - r-ggplot2=3.3.2
+  - r-knitr=1.29
+  - r-rcolorbrewer=1.1_2
+  - r-reshape2=1.4.3
+  - r-rmarkdown=2.3
+  - r-sm=2.2_5.6
+  - r-venndiagram=1.6.20
+  - r-webgestaltr=0.4.4
   - salmon=1.4.0
-  - snakemake-minimal=5.19.2
-  - r-sm
-  - r-reshape2
-  - goatools=1.0.6
-  - r-dplyr
-  - r-venndiagram
+  - snakemake-minimal
