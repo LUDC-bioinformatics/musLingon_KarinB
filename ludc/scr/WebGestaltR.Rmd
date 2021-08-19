@@ -1,0 +1,199 @@
+---
+title: "Mouse Lingon diet experiment: WebGestaltR enrichment analysis"
+author:
+  name: "Dmytro Kryvokhyzha"
+email: dmytro.kryvokhyzha@med.lu.se
+affiliation: LUDC Bioinformatics Unit
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output:
+  html_document:
+  toc: true
+---
+  
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo=TRUE, eval=TRUE)
+knitr::opts_knit$set(root.dir = '../')
+```
+
+## Dependencies
+
+```{r, message=FALSE, eval=TRUE}
+library(WebGestaltR)
+```
+
+## Data
+
+```{r}
+d <- read.table('results/tables/deseq/LingonProj_DESeqres.csv', header = T)
+rownames(d) <- d$gene
+```
+
+## Enrichment
+
+### HFD vs Lingon
+
+```{r}
+HFD_vs_Lingon <- WebGestaltR(interestGene = as.vector(d[d$padj_HFD_vs_Lingon<0.1,'gene']),
+                              referenceGene = as.vector(d$gene),
+                              interestGeneType = "ensembl_gene_id",
+                              referenceGeneType = "ensembl_gene_id",
+                              enrichMethod = "ORA",
+                              organism = "mmusculus",
+                              enrichDatabase = c('geneontology_Biological_Process',
+                                                 'geneontology_Cellular_Component',
+                                                 'geneontology_Molecular_Function'),
+                              sigMethod = "fdr",
+                              fdrMethod = "BH",
+                              fdrThr = 0.05,
+                              reportNum = 30,
+                              minNum = 5,
+                              maxNum = 2000,
+                              isOutput = TRUE,
+                              outputDirectory = 'results/reports/',
+                              projectName = 'HFD_vs_Lingon_FDR_0.1_ORA',
+                              nThreads = 8)
+HFD_vs_Lingon <- HFD_vs_Lingon[order(HFD_vs_Lingon$enrichmentRatio, decreasing = T),]
+HFD_vs_Lingon[,c('description', 'enrichmentRatio')]
+```
+
+### HFD vs LFD
+
+```{r}
+HFD_vs_LFD <- WebGestaltR(interestGene = as.vector(d[d$padj_HFD_vs_LFD<0.01,'gene']),
+                              referenceGene = as.vector(d$gene),
+                              interestGeneType = "ensembl_gene_id",
+                              referenceGeneType = "ensembl_gene_id",
+                              enrichMethod = "ORA",
+                              organism = "mmusculus",
+                              enrichDatabase = c('geneontology_Biological_Process',
+                                                 'geneontology_Cellular_Component',
+                                                 'geneontology_Molecular_Function'),
+                              sigMethod = "fdr",
+                              fdrMethod = "BH",
+                              fdrThr = 0.05,
+                              reportNum = 30,
+                              minNum = 5,
+                              maxNum = 2000,
+                              isOutput = TRUE,
+                              outputDirectory = 'results/reports/',
+                              projectName = 'HFD_vs_LFD_FDR_0.01_ORA',
+                              nThreads = 8)
+HFD_vs_LFD <- HFD_vs_LFD[order(HFD_vs_LFD$enrichmentRatio, decreasing = T),]
+HFD_vs_LFD[,c('description', 'enrichmentRatio')]
+```
+
+### LFD vs Lingon
+
+```{r}
+LFD_vs_Lingon <- WebGestaltR(interestGene = as.vector(d[d$padj_LFD_vs_Lingon<0.01,'gene']),
+                              referenceGene = as.vector(d$gene),
+                              interestGeneType = "ensembl_gene_id",
+                              referenceGeneType = "ensembl_gene_id",
+                              enrichMethod = "ORA",
+                              organism = "mmusculus",
+                              enrichDatabase = c('geneontology_Biological_Process',
+                                                 'geneontology_Cellular_Component',
+                                                 'geneontology_Molecular_Function'),
+                              sigMethod = "fdr",
+                              fdrMethod = "BH",
+                              fdrThr = 0.05,
+                              reportNum = 30,
+                              minNum = 5,
+                              maxNum = 2000,
+                              isOutput = TRUE,
+                              outputDirectory = 'results/reports/',
+                              projectName = 'LFD_vs_Lingon_FDR_0.01_ORA',
+                              nThreads = 8)
+LFD_vs_Lingon <- LFD_vs_Lingon[order(LFD_vs_Lingon$enrichmentRatio, decreasing = T),]
+LFD_vs_Lingon[,c('description', 'enrichmentRatio')]
+```
+
+
+## Candidate genes
+
+We decided to verify in the lab the following genes from the comparison HFD_vs_Lingon:
+   
+   - mitochondrial fission
+   - angiogenesis
+   
+Function to plot genes
+
+```{r}
+plot_genes <- function(data){
+  for (i in c(1:dim(data)[1])){
+    # i <- 1
+    expr <- as.numeric(data[i,c(14:26)])
+    condition <- as.factor(c(rep('HFD', 5), rep('LFD', 4), rep('Lingon', 4)))
+    boxplot(expr~condition, main=data$symbol[i],
+            xlab = "", ylab = "Normilized expression (TPM)")
+  }
+}
+```
+
+### Mitochondrial fission
+
+Select genes
+
+```{r}
+mt_fission_id <- unique(unlist(strsplit(unlist(HFD_vs_Lingon$userId[
+                 grep('mitochondrial fission', HFD_vs_Lingon$description)]),';')))
+mt_fission_res <- d[mt_fission_id,]
+mt_fission_res <- mt_fission_res[order(mt_fission_res$padj_HFD_vs_Lingon),]
+```
+
+Plot their expression
+
+```{r}
+filePath <- 'results/tables/candidates_lab_verification/'
+pdf(paste(filePath, 'HFD_vs_Lingon_mitochondrial_fission.pdf', sep=''))
+  plot_genes(mt_fission_res)
+dev.off()
+```
+
+Write to table
+
+```{r}
+write.table(mt_fission_res,
+            paste(filePath, 'HFD_vs_Lingon_mitochondrial_fission.csv', sep=''),
+            row.names = F,
+            sep = '\t')
+```
+
+
+### Angiogenesis
+
+```{r}
+angiogenesis_id <- unique(unlist(strsplit(unlist(HFD_vs_Lingon$userId[c(3:14)]),';')))
+angiogenesis_res <- d[angiogenesis_id,]
+angiogenesis_res <- angiogenesis_res[order(angiogenesis_res$padj_HFD_vs_Lingon),]
+```
+
+Plot their expression
+
+```{r}
+filePath <- 'results/tables/candidates_lab_verification/'
+pdf(paste(filePath, 'HFD_vs_Lingon_angiogenesis.pdf', sep=''))
+  plot_genes(angiogenesis_res)
+dev.off()
+```
+
+Write to table
+
+```{r}
+write.table(angiogenesis_res,
+            paste(filePath, 'HFD_vs_Lingon_angiogenesis.csv', sep=''),
+            row.names = F,
+            sep = '\t')
+```
+
+```{bash, include=F, eval=T}
+# conver csv to xlsx:
+cd results/tables/candidates_lab_verification/
+for i in HFD_vs_Lingon_*.csv;
+  do
+    soffice --headless \
+            --convert-to xlsx:"Calc MS Excel 2007 XML" \
+            --infilter="csv:9,34,UTF8" $i;
+  done
+cd -
+```

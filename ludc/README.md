@@ -4,13 +4,12 @@ author:
    name: "Shuyi Li & Dmytro Kryvokhyzha"
    email: dmytro.kryvokhyzha@med.lu.se
    affiliation: LUDC Bioinformatics Unit
-date: "02 March, 2021"
+date: "19 augusti, 2021"
 output:
     html_document:
       keep_md: true
       toc: true
 ---
-
 
 
 
@@ -125,22 +124,18 @@ Results:
 
 ### Enrichment analysis
 
-Performed with [clusterprofiler](https://bioconductor.org/packages/release/bioc/vignettes/clusterProfiler/inst/doc/clusterProfiler.html):
+Performed with [WEB-based GEne SeT AnaLysis Toolkit](http://www.webgestalt.org):
 
 
 ```bash
-# GO analysis
-R -e 'rmarkdown::render("scr/GO_analysis.Rmd", output_dir="results/reports/")'
-# KEGG analysis
-R -e 'rmarkdown::render("scr/KEGG_analysis.Rmd", output_dir="results/reports/")'
+R -e 'rmarkdown::render("scr/WebGestaltR.Rmd", output_dir="results/reports/")'
 ```
 
 Results:
 
-* `results/reports/GO_analysis.html` - notebook describing the GO analysis
-* `results/tables/GO_results/` - GO analysis results table
-* `results/reports/KEGG_analysis.html` - notebook desscribing the KEGG analysis
-* `results/tables/KEGG_results/` - KEGG analysis results table
+* `results/reports/Project_HFD_vs_Lingon_FDR_0_1_ORA` - ORA analysis of HFD_vs_Lingon FDR < 0.1.
+* `results/reports/Project_HFD_vs_LFD_FDR_0_01_ORA` - ORA analysis of HFD_vs_LFD FDR < 0.01.
+* `results/reports/Project_LFD_vs_Lingon_FDR_0_01_ORA` - ORA analysis of LFD_vs_Lingon FDR < 0.01.
 
 ### Select interesting gene
 
@@ -154,3 +149,37 @@ python scr/select_gene.py -i results/tables/deseq/LingonProj_DESeqres.csv -g dat
 Results:
 
 * `results/tables/deseq/LingonProj_interesting_gene.csv` - DESeq results with only interesting gene (listed above in the analysis step) selected.
+
+### Compare with the published results
+
+We compare our results with the paper [Intact glucose uptake despite deteriorating signaling in adipocytes with high-fat feeding](https://jme.bioscientifica.com/view/journals/jme/60/3/JME-17-0195.xml).
+
+We expect the highest correlation of our results with 4 days results in this paper. 
+
+
+```bash
+R -e 'rmarkdown::render("scr/compare_with_published.Rmd", output_dir="results/reports/")'
+```
+
+We see the similarity in foldchange and day 4 factor in ANOVA, but mean expression 
+is also similar to day 2 and sometimes to day 6 depending at what genes we look.
+This may be because the food is a little different - 
+the high fat diet with Lingon contained 45% fat, compared with my previous short-term HFD study where the diet contained 58% fat.
+
+## Lab verification
+
+We decided to verify in the lab the following genes:
+   
+   - mitochondrial fission
+   - angiogenesis
+
+These genes are selected in the `scr/WebGestaltR.Rmd` notebook and output to:
+
+* `results/tables/candidates_lab_verification/HFD_vs_Lingon_mitochondrial_fission.csv` - 
+DESeq results for genes related to mitochondrial fission.
+* `results/tables/candidates_lab_verification/HFD_vs_Lingon_mitochondrial_fission.pdf` -
+expression of genes related to mitochondrial fission.
+* `results/tables/candidates_lab_verification/HFD_vs_Lingon_angiogenesis.csv` - DESeq results for
+genes related to angiogenesis.
+* `results/tables/candidates_lab_verification/HFD_vs_Lingon_angiogenesis.pdf` - expression of
+genes related to angiogenesis.
