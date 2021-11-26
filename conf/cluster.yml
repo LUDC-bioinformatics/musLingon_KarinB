@@ -1,0 +1,3 @@
+__default__:
+  cores: 10
+  ram: 30Gb

@@ -12,7 +12,7 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, eval = FALSE)
+knitr::opts_chunk$set(warning=FALSE, eval=FALSE, message=FALSE)
 ```
 
 ## PI
@@ -35,25 +35,153 @@ RNA-seq data were collected from adipose tissue.
 
 Each group has 5 samples.
 
+**Analysis steps**:
+
+1. QC sequencing data
+2. Map and count reads
+3. Make pair-wise comparisons between three groups (HFD vs LFD/HFD vs Lingon/LFD vs Lingon) to find the differential expressed (DE) genes
+4. Perform enrichment analysis (GO & KEGG)
+   - Gene set enrichment analysis
+   - Over-representation analysis
+5. Check interesing gene, GO terms and KEGG pathways
+   * Potential interesting genes
+       - FABP4
+       - Fsp27
+       - CIDEA
+       - SLC2A4
+       - PNPLA2
+       - PLIN1
+       - CAV1
+       - PPARG
+       - DGAT2
+       - Anxa2
+       - Aacs
+       - Acacb
+       - Acly
+       - Elovls
+       - Acots
+       - Cidec
+       - Insig2
+       - ApoA4
+   * Interesting GO
+      - glucose metabolism
+      - adipogenesis
+      - mitochondria functions
+   * Interesting pathways
+      - Lipid synthesis
+      - Regulation of lipid metabolism
+      - Enzymes in fatty acid activation and oxidation
+      - Lipolysis
+      - Cholesterol metabolism
+      - Glucose uptake
 
 ## Data
 
-All the data is located on the Indigo server: `/ludc/Active_Projects/Mouse_Adipocite_Lingonberry/`
+All the data is located on the Indigo server: `/ludc/Active_Projects/Mouse_Adipocite_Lingonberry/ludc/`
 
-## Analyses
+## Prerequisites
 
-### NBIS analysis
+You need to install [Conda](https://docs.conda.io/en/latest/) and load the pre-configured conda environment. It should also install all the required programs.
 
-This project has been first analyzed by [NBIS](https://nbis.se/)
+```{bash}
+conda env create -f conf/conda.yml
+conda activate LingonProj
+```
 
-Unfortunately, there was no clear step-by-step explanation of the analyses.
-We re-cover all the analysis steps and describe the analysis in [nbis](nbis).
+## Analysis
 
-They comapred all three groups togather in the RSEM frameworl, 
-while the main question was to perform pairwise comparisons.
+### QC
 
-So, we re-analyzed the data ourselves.
+Preliminary fastq QC results can be found in: `~/results/tables/multiqc/`
 
-### Our analysis
+QC reports can be found in: `~/results/reports/`
 
-[ludc](ludc) - description and results of our pair-wise analysis.
+### Map and count reads
+
+Performed with [Salmon](https://salmon.readthedocs.io/en/latest/salmon.html):
+
+```{bash}
+snakemake -s scr/salmon.smk \
+   -j 100 \
+   -p --use-conda \
+   --cluster-config conf/cluster.yml \
+   --cluster "condor_qsub -o logs/{rule}.out -e logs/{rule}.err -l procs={cluster.cores},mem={cluster.ram} -m e -V"
+```
+
+Results:
+
+* `results/tables/salmon/{sample}/quant.sf.gz` - transcripts counts
+* `results/tables/salmon/{sample}/quant.genes.sf.gz` -gene-level counts
+
+### Differential expression
+
+Performed with [DESeq2](https://bioconductor.org/packages/release/bioc/html/DESeq2.html):
+
+```{bash}
+R -e 'rmarkdown::render("scr/DESeq.Rmd", output_dir="results/reports/")'
+```
+
+Results:
+
+* `results/reports/DESeq.html` - notebook describing the analysis
+* `results/tables/deseq/LingonProj_DESeqres.csv` - differential expression results with TMP (three results in one table).
+* `results/figures/` - plots saved as pdf files
+
+### Enrichment analysis
+
+Performed with [WEB-based GEne SeT AnaLysis Toolkit](http://www.webgestalt.org):
+
+```{bash}
+R -e 'rmarkdown::render("scr/WebGestaltR.Rmd", output_dir="results/reports/")'
+```
+
+Results:
+
+* `results/reports/Project_HFD_vs_Lingon_FDR_0_1_ORA` - ORA analysis of HFD_vs_Lingon FDR < 0.1.
+* `results/reports/Project_HFD_vs_LFD_FDR_0_01_ORA` - ORA analysis of HFD_vs_LFD FDR < 0.01.
+* `results/reports/Project_LFD_vs_Lingon_FDR_0_01_ORA` - ORA analysis of LFD_vs_Lingon FDR < 0.01.
+
+### Select interesting gene
+
+**Note**：interesting_gene.txt is created in advance (case insensitive)
+
+```{bash}
+python scr/select_gene.py -i results/tables/deseq/LingonProj_DESeqres.csv -g data/reference/interesting_gene.txt -o results/tables/deseq/LingonProj_interesting_gene.csv
+```
+
+Results:
+
+* `results/tables/deseq/LingonProj_interesting_gene.csv` - DESeq results with only interesting gene (listed above in the analysis step) selected.
+
+### Compare with the published results
+
+We compare our results with the paper [Intact glucose uptake despite deteriorating signaling in adipocytes with high-fat feeding](https://jme.bioscientifica.com/view/journals/jme/60/3/JME-17-0195.xml).
+
+We expect the highest correlation of our results with 4 days results in this paper. 
+
+```{bash}
+R -e 'rmarkdown::render("scr/compare_with_published.Rmd", output_dir="results/reports/")'
+```
+
+We see the similarity in foldchange and day 4 factor in ANOVA, but mean expression 
+is also similar to day 2 and sometimes to day 6 depending at what genes we look.
+This may be because the food is a little different - 
+the high fat diet with Lingon contained 45% fat, compared with my previous short-term HFD study where the diet contained 58% fat.
+
+## Lab verification
+
+We decided to verify in the lab the following genes:
+   
+   - mitochondrial fission
+   - angiogenesis
+
+These genes are selected in the `scr/WebGestaltR.Rmd` notebook and output to:
+
+* `results/tables/candidates_lab_verification/HFD_vs_Lingon_mitochondrial_fission.csv` - 
+DESeq results for genes related to mitochondrial fission.
+* `results/tables/candidates_lab_verification/HFD_vs_Lingon_mitochondrial_fission.pdf` -
+expression of genes related to mitochondrial fission.
+* `results/tables/candidates_lab_verification/HFD_vs_Lingon_angiogenesis.csv` - DESeq results for
+genes related to angiogenesis.
+* `results/tables/candidates_lab_verification/HFD_vs_Lingon_angiogenesis.pdf` - expression of
+genes related to angiogenesis.
