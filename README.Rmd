@@ -43,7 +43,7 @@ Each group has 5 samples.
 4. Perform enrichment analysis (GO & KEGG)
    - Gene set enrichment analysis
    - Over-representation analysis
-5. Check interesing gene, GO terms and KEGG pathways
+5. Check interesting gene, GO terms and KEGG pathways
    * Potential interesting genes
        - FABP4
        - Fsp27
@@ -163,7 +163,7 @@ We expect the highest correlation of our results with 4 days results in this pap
 R -e 'rmarkdown::render("scr/compare_with_published.Rmd", output_dir="results/reports/")'
 ```
 
-We see the similarity in foldchange and day 4 factor in ANOVA, but mean expression 
+We see the similarity in fold change and day 4 factor in ANOVA, but mean expression 
 is also similar to day 2 and sometimes to day 6 depending at what genes we look.
 This may be because the food is a little different - 
 the high fat diet with Lingon contained 45% fat, compared with my previous short-term HFD study where the diet contained 58% fat.
@@ -185,3 +185,38 @@ expression of genes related to mitochondrial fission.
 genes related to angiogenesis.
 * `results/tables/candidates_lab_verification/HFD_vs_Lingon_angiogenesis.pdf` - expression of
 genes related to angiogenesis.
+
+## Maqui and Lingon overlap
+
+One of the reviewers requested to check the overlap between gene affected by
+maqui berry and our results.
+
+I manually extracted the list of genes from Fig.3 in https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6769892/ and extracted these genes
+from our results:
+
+```{bash}
+head -n 1 results/tables/deseq/LingonProj_DESeqres.csv \
+   > results/tables/Maqui_lingon_genes_overlap.csv
+grep -f data/Maqui_genes.txt results/tables/deseq/LingonProj_DESeqres.csv \
+   >> results/tables/Maqui_lingon_genes_overlap.csv
+```
+
+Only *Acaca, Ppargc1a, Acly, Fasn* were among the significant results in the comparison HFD_vs_LFD. These genes are up-regulated in LFD.
+*Acaca, Ppargc* are significant in the comparison LFD_vs_Lingon and up-regulated in LFD.
+
+There are no significant matches in HFD_vs_Lingon, although *Acaca* has a p-value of 0.136 and it is up-regulated in Lingon.
+
+So, we may say that we see similar effect only for the *Acaca* gene that is up-regulated by both Maqui and Lingon berries. We can also mention that although we do not get significant difference for these genes in the comparison HFD_vs_Lingon, all these genes except *Prdm16, Cpt1b, Acox3, Prdm16* are expressed on average at higher level in Lingon than in HFD. This overlap is significantly non-random:
+
+```{r}
+dat <- data.frame(
+  "Maqui" = c(15, 0),
+  "Lingon" = c(11, 4),
+  row.names = c("up", "down"),
+  stringsAsFactors = FALSE
+)
+dat
+fisher.test(dat, alternative = "greater")
+```
+
+So, the effect seems to be partially similar between Maqui and Lingon berries.
