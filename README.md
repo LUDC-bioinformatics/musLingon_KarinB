@@ -4,7 +4,7 @@ author:
    name: "Shuyi Li & Dmytro Kryvokhyzha"
    email: dmytro.kryvokhyzha@med.lu.se
    affiliation: LUDC Bioinformatics Unit
-date: "11 mars, 2022"
+date: "19 maj, 2022"
 output:
     html_document:
       keep_md: true
@@ -12,6 +12,10 @@ output:
 ---
 
 
+
+## Paper
+
+Kotowska et al. 2022 **Short-term lingonberry feeding is associated with decreased insulin levels and altered adipose tissue function in high-fat diet fed C57BL/6J mice**, Journal of Functional Foods.
 
 ## PI
 
@@ -74,6 +78,8 @@ Each group has 5 samples.
       - Glucose uptake
 
 ## Data
+
+The RNA-Seq data is uploaded to the NCBI under the BioProject [PRJNA783912](https://www.ncbi.nlm.nih.gov/bioproject/?term=PRJNA783912).
 
 All the data is located on the Indigo server: `/ludc/Active_Projects/Mouse_Adipocite_Lingonberry/ludc/`
 
