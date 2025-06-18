@@ -1,7 +1,7 @@
 ---
 title: "Mouse Lingon diet experiment"
 author:
-   name: "Shuyi Li & Dmytro Kryvokhyzha"
+   name: "Dmytro Kryvokhyzha & Shuyi Li"
    email: dmytro.kryvokhyzha@med.lu.se
    affiliation: LUDC Bioinformatics Unit
 date: "19 maj, 2022"
