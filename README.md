@@ -15,7 +15,7 @@ output:
 
 ## Paper
 
-Kotowska et al. 2022 **Short-term lingonberry feeding is associated with decreased insulin levels and altered adipose tissue function in high-fat diet fed C57BL/6J mice**, Journal of Functional Foods.
+[Kotowska et al. 2022 **Short-term lingonberry feeding is associated with decreased insulin levels and altered adipose tissue function in high-fat diet fed C57BL/6J mice**, Journal of Functional Foods.](https://doi.org/10.1016/j.jff.2022.105125)
 
 ## PI
 
